@@ -9,7 +9,7 @@ import com.PASN.model.User;
 import com.PASN.repository.UserRepository;
 
 @Service
-@SuppressWarnings("null")
+@SuppressWarnings("nullness")
 public class UserService {
     
     @Autowired

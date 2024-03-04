@@ -9,7 +9,7 @@ import com.PASN.model.Subject;
 import com.PASN.repository.SubjectRepository;
 
 @Service
-@SuppressWarnings("null")
+@SuppressWarnings("nullness")
 public class SubjectService {
     
     @Autowired

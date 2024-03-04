@@ -10,7 +10,7 @@ import com.PASN.repository.ClassRatingRepository;
 import com.PASN.repository.ClassRepository;
 
 @Service
-@SuppressWarnings("null")
+@SuppressWarnings("nullness")
 public class ClassService {
     
     @Autowired

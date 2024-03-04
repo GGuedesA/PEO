@@ -10,7 +10,7 @@ import com.PASN.repository.TeacherRatingRepository;
 import com.PASN.repository.TeacherRepository;
 
 @Service
-@SuppressWarnings("null")
+@SuppressWarnings("nullness")
 public class TeacherService {
     
     @Autowired
