@@ -42,10 +42,44 @@ public class UserController {
         return new ResponseEntity<>(instance, HttpStatus.CREATED);
     }
 
-    @PutMapping("/")
-    public ResponseEntity<User> update(@RequestBody User object) {
-        User instance = service.save(object);
-        return new ResponseEntity<>(instance, HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User partialUser) {
+        User existingUser = service.getById(id);
+
+    if (existingUser == null) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    if (partialUser.getName() != null) {
+        existingUser.setName(partialUser.getName());
+    }
+
+    if (partialUser.getEmail() != null) {
+        existingUser.setEmail(partialUser.getEmail());
+    }
+
+    if (partialUser.getPassword() != null) {
+        existingUser.setPassword(partialUser.getPassword());
+    }
+
+    if (partialUser.getBirthDate() != null) {
+        existingUser.setBirthDate(partialUser.getBirthDate());
+    }
+
+    if (partialUser.getPhoneNumber() != null) {
+        existingUser.setPhoneNumber(partialUser.getPhoneNumber());
+    }
+
+    if (partialUser.getCpf() != null) {
+        existingUser.setCpf(partialUser.getCpf());
+    }
+
+    if (partialUser.getCep() != null) {
+        existingUser.setCep(partialUser.getCep());
+    }
+
+    User updatedUser = service.save(existingUser);
+    return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

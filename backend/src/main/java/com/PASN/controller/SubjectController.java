@@ -42,10 +42,20 @@ public class SubjectController {
         return new ResponseEntity<>(instance, HttpStatus.CREATED);
     }
 
-    @PutMapping("/")
-    public ResponseEntity<Subject> update(@RequestBody Subject object) {
-        Subject instance = service.save(object);
-        return new ResponseEntity<>(instance, HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<Subject> update(@PathVariable Long id, @RequestBody Subject partialSubject) {
+        Subject existingSubject = service.getById(id);
+
+    if (existingSubject == null) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    if (partialSubject.getName() != null) {
+        existingSubject.setName(partialSubject.getName());
+    }
+
+    Subject updatedSubject = service.save(existingSubject);
+    return new ResponseEntity<>(updatedSubject, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

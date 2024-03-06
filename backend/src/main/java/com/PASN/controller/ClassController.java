@@ -42,10 +42,32 @@ public class ClassController {
         return new ResponseEntity<>(instance, HttpStatus.CREATED);
     }
 
-    @PutMapping("/")
-    public ResponseEntity<Class> update(@RequestBody Class object) {
-        Class instance = service.save(object);
-        return new ResponseEntity<>(instance, HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<Class> update(@PathVariable Long id, @RequestBody Class partialClass) {
+        Class existingClass = service.getById(id);
+
+    if (existingClass == null) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    if (partialClass.getTeacher() != null) {
+        existingClass.setTeacher(partialClass.getTeacher());
+    }
+
+    if (partialClass.getStudents() != null) {
+        existingClass.setStudents(partialClass.getStudents());
+    }
+
+    if (partialClass.getStatus() != null) {
+        existingClass.setStatus(partialClass.getStatus());
+    }
+
+    if (partialClass.getRating() != null) {
+        existingClass.setRating(partialClass.getRating());
+    }
+
+    Class updatedClass = service.save(existingClass);
+    return new ResponseEntity<>(updatedClass, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

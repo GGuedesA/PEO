@@ -42,10 +42,33 @@ public class TeacherController {
         return new ResponseEntity<>(instance, HttpStatus.CREATED);
     }
 
-    @PutMapping("/")
-    public ResponseEntity<Teacher> update(@RequestBody Teacher object) {
-        Teacher instance = service.save(object);
-        return new ResponseEntity<>(instance, HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<Teacher> update(@PathVariable Long id, @RequestBody Teacher partialTeacher) {
+        Teacher existingTeacher = service.getById(id);
+
+    if (existingTeacher == null) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    if (partialTeacher.getPerson() != null) {
+        existingTeacher.setPerson(partialTeacher.getPerson());
+    }
+
+    if (partialTeacher.getEstimatedPrice() != null) {
+        existingTeacher.setEstimatedPrice(partialTeacher.getEstimatedPrice());
+    }
+
+    if (partialTeacher.getSubjects() != null) {
+        existingTeacher.setSubjects(partialTeacher.getSubjects());
+    }
+
+    if (partialTeacher.getRating() != null) {
+        existingTeacher.setRating(partialTeacher.getRating());
+    }
+
+    Teacher updatedTeacher = service.save(existingTeacher);
+
+    return new ResponseEntity<>(updatedTeacher, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
