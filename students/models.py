@@ -1,7 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, Group, Permission
 from django.utils import timezone
 from .managers import StudentManager
+
 
 class Student(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=100)
@@ -12,26 +13,15 @@ class Student(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["name"]
-    
+
     objects = StudentManager()
-    
+
+    groups = models.ManyToManyField(Group, related_name="student_groups", blank=True)
+    user_permissions = models.ManyToManyField(
+        Permission, related_name="student_permissions", blank=True
+    )
+
     def __str__(self):
         return self.email
-    
-    groups = models.ManyToManyField(
-        'auth.Group',
-        related_name='student_set',
-        blank=True,
-        help_text='The groups this user belongs to.',
-        verbose_name='groups',
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        related_name='student_user_permissions_set',
-        blank=True,
-        help_text='Specific permissions for this user.',
-        verbose_name='user permissions',
-    )

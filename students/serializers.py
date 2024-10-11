@@ -23,6 +23,13 @@ class StudentSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
     
     def update(self, instance, validated_data):
-        del validated_data["password_confirmation"]
-        validated_data["password"] = make_password(validated_data["password"])
-        return super().update(instance, validated_data)
+        if "password_confirmation" in validated_data:
+          del validated_data["password_confirmation"]
+
+        if "password" in validated_data:
+          instance.password = make_password(validated_data["password"])
+
+        for attr, value in validated_data.items():
+          setattr(instance, attr, value)
+        instance.save()  
+        return instance

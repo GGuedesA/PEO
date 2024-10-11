@@ -12,6 +12,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class CustomTokenRefreshSerializer(TokenRefreshSerializer):
     refresh_token = serializers.CharField(required=True)
     refresh = None
+    
     def validate(self, attrs):
         attrs["refresh"] = attrs.pop("refresh_token")
         data = super().validate(attrs)
@@ -22,6 +23,7 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
 class CustomTokenBlacklistSerializer(TokenBlacklistSerializer):
     refresh_token = serializers.CharField(required=True)
     refresh = None
+    
     def validate(self, attrs):
         attrs["refresh"] = attrs.pop("refresh_token")
         return super().validate(attrs)
