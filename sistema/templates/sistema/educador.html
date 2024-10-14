@@ -1,0 +1,43 @@
+{% extends 'global/base.html' %}
+{% load static %}
+{% block content %}
+  <div class="container-fluid d-flex flex-column align-items-center">
+    
+    <div class="content-single-educador d-flex justify-content-between">
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-md-4">
+              {% if educador.usuario.imagem != '' %}
+                <img src="/media/{{ educador.usuario.imagem }}" class="card-img-top educator-img" alt="..." />
+              {% else %}
+                <img src="{% static 'global/imgs/profile-pic.svg' %}" class="card-img-top no-img" alt="..." />
+              {% endif %}
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">{{ educador.usuario.nome }}</h5>
+                {% for area in areas %}
+                    <span class="badge bg-primary">{{ area.nome }}</span>
+                {% endfor %}
+                <p class="card-text">{{ educador.minibio }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="dados-aula d-flex flex-column align-items-center">
+            <span class="d-flex flex-column align-items-center">
+                <h2>Valor Aula</h2>
+                <h5>R$ {{ educador.valor_aula }}</h5>
+                <h2>Tempo Aula</h2>
+                <h5>{{ educador.tempo_aula }} minutos</h5>
+                <button type="button" class="btn btn-primary">Contatar</button>
+            </span>
+        </div>
+    </div>
+    <div class="descricao-educador">
+        <h2>Descrição do Educador</h2>
+        <p>{{ educador.descricao }}</p>
+    </div>
+
+  </div>
+{% endblock %}
