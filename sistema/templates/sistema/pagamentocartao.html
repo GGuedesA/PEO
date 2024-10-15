@@ -1,0 +1,59 @@
+{% extends 'global/base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'global/css/pagamento.css' %}" />
+
+
+
+<div class="container-fluid d-flex flex-column align-items-center">
+    <h4 class="titulo">Pagamento</h4>
+    <div class="row">
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                <label class="form-check-label" for="flexRadioDefault1">
+                    Cartão de crédito
+                </label>
+        </div>
+        <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        Cartão de débito
+                    </label>
+        </div>
+
+            <form class=" align-items-center">
+                <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="inputEmail4" class="form-label">Nome do cartão</label>
+                  <input type="email" class="form-control" id="inputEmail4">
+                </div>
+                <div class="col-md-6">
+                  <label for="inputAddress" class="form-label">Número do cartão</label>
+                  <input type="text" class="form-control" id="inputAddress" placeholder="">
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-2">
+                  <label for="inputZip" class="form-label">Expiração</label>
+                  <input type="text" class="form-control" id="inputZip">
+                </div>
+                <div class="col-md-2">
+                    <label for="inputZip" class="form-label">CVV</label>
+                    <input type="text" class="form-control" id="inputZip">
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="gridCheck">
+                    <label class="form-check-label" for="gridCheck">
+                        Declaro estar ciente e de acordo com a compra
+                    </label>
+                  </div>
+                </div>
+                <div class="col-12 d-flex flex-column align-items-center">
+                  <button type="submit" class="btn btn-primary">Pagar</button>
+                </div>
+              </form>
+    </div>
+</div>
+{% endblock %}

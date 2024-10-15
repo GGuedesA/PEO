@@ -49,3 +49,6 @@ def educador(request, educador_id):
         'areas': areas
     }
     return render(request, 'sistema/educador.html', context)
+
+def pagamentocartao(request):
+    return render(request, 'sistema/pagamentocartao.html', )
