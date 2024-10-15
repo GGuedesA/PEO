@@ -56,3 +56,7 @@ def dados_usuario(request, _id):
         'usuario': usuario,
     }
     return render(request, 'sistema/dados_usuario.html', context)
+
+
+def pagamentocartao(request):
+    return render(request, 'sistema/pagamentocartao.html', )
