@@ -66,6 +66,30 @@ if __name__ == '__main__':
     if(gerar_educadores):
         usuarios_sem_educador = Usuario.objects.exclude(educador__isnull=False)
         areas = list(Area.objects.all())
+        if(len(areas) < 1):
+            areas_criar = [
+                'Matemática', 
+                'Português', 
+                'Ciências', 
+                'Cálculo diferencial', 
+                'Cálculo 1',
+                'História',
+                'Geografia',
+                'Inglês',
+                'Religião',
+                'Filosofia',
+                'Estrutura de dados',
+                'Biologia',
+                'Química',
+                'Arquitetura de software',
+                'Sistemas distribuidos',
+            ]
+            areas_salvar = []
+            for area in areas_criar:
+                areas_salvar.append(Area(
+                    nome=area
+                ))
+            Area.objects.bulk_create(areas_salvar)
         educadores = []
         for i in range(NUMBER_OF_EDUCATORS if len(usuarios_sem_educador) >= NUMBER_OF_EDUCATORS else len(usuarios_sem_educador)):
             qtd_areas = randint(1, 6)

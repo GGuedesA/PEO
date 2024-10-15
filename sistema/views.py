@@ -31,8 +31,12 @@ def buscar(request):
                         Q(usuario__nome_usuario__icontains=busca) | 
                         Q(usuario__nome__icontains=busca)
                     )
+    paginator = Paginator(educadores, 25)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
     context = {
-        'educadores': educadores,
+        'page_obj': page_obj,
         'valor_buscado': busca,
     }
     return render(request, 'sistema/educadores.html', context)
