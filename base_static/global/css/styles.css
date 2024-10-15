@@ -76,12 +76,12 @@
   font-weight: 700 !important;
 }
 
-.nav-item { 
-  transition: all .2s ease-in-out; 
+.nav-item {
+  transition: all .2s ease-in-out;
 }
 
-.nav-item:hover { 
-  transform: scale(1.1); 
+.nav-item:hover {
+  transform: scale(1.1);
 }
 
 .header-list {
@@ -116,7 +116,7 @@ body {
 }
 
 .card-list {
-  transition: all .2s ease-in-out; 
+  transition: all .2s ease-in-out;
 }
 
 .card-list:hover {
@@ -126,14 +126,17 @@ body {
 .educator-img {
   max-height: 20rem;
 }
+
 .no-img {
   max-height: 20rem;
   padding: 2rem;
 }
-.card-redirect{
+
+.card-redirect {
   text-decoration: none;
   color: black;
 }
+
 .custom-chip {
   background-color: #0d6dfd;
   padding: 0.25rem;
@@ -143,7 +146,9 @@ body {
   margin: 0.1rem 0.15rem;
   color: white;
 }
-.content-single-educador, .descricao-educador{
+
+.content-single-educador,
+.descricao-educador {
   width: 60%;
   gap: 1.5rem;
   margin: 2rem 0;
@@ -153,7 +158,8 @@ body {
   min-width: fit-content;
 }
 
-.dados-aula, .descricao-educador {
+.dados-aula,
+.descricao-educador {
   background-color: #C2C8FF;
   padding: 2rem;
   border: 1px solid black;
@@ -181,24 +187,73 @@ body {
   display: block;
 }
 
+.form-usuario {
+  width: 80%;
+  background-color: aliceblue;
+  padding: 2rem;
+  border: 1px solid black;
+  box-shadow: 0 5px 10px 2px var(--clr-dark-shadow-20);
+  border-radius: 1rem;
+}
+
+.btns-forms {
+  gap: 1.5rem;
+}
+
+.form-group {
+  width: 100%;
+}
+
+.btn-container {
+  justify-content: end;
+  padding-bottom: 2rem;
+}
+.btn-submit {
+  height: 3rem;
+}
+
+.errorlist {
+  margin-left: 0;
+  padding-left: 0;
+  font-size: medium;
+}
+.infos-usuario {
+  font-size: large;
+  font-weight: 500;
+}
+.dados-usuario {
+  font-size: medium;
+  font-weight: 400;
+}
 
 @media screen and (max-width: 600px) {
   .header-list {
     flex-direction: column;
   }
+
   .div-btns {
     justify-content: end;
     gap: 0.5rem;
   }
+
   .content-single-educador {
     flex-direction: column;
     align-items: center;
   }
+
   .dados-aula {
     width: 100%;
   }
-  .search-bar{
+
+  .search-bar {
     width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .form-group {
+    width: 50%;
+    padding-inline: 0rem 1rem;
   }
 }
 

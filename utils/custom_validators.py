@@ -1,9 +1,10 @@
 from random import randint
+from datetime import date, datetime, timedelta
 
 
 def cpf_validate(numbers):
     #  Obtém os números do CPF e ignora outros caracteres
-    cpf = [int(char) for char in numbers if char.isdigit()]
+    cpf = [int(char) for char in str(numbers) if char.isdigit()]
 
     #  Verifica se o CPF tem 11 dígitos
     if len(cpf) != 11:
@@ -40,3 +41,15 @@ def cpf_generate():
     #  Retorna o CPF como string
     result = ''.join(map(str, cpf))
     return result
+
+def valida_data_nascimento(passed_date: date):
+    today = date.today()
+    diff = today.year - passed_date.year
+
+    # Ajuste se o aniversário ainda não ocorreu este ano
+    if (today.month, today.day) < (passed_date.month, passed_date.day):
+        diff -= 1
+
+    if diff >= 18:
+        return True
+    return False

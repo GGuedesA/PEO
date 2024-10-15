@@ -20,7 +20,7 @@ if __name__ == '__main__':
     import faker
     from random import randint, uniform, sample
     from sistema.models import Usuario, Educador, Area
-    from utils.cpf_validator import cpf_generate
+    from utils.custom_validators import cpf_generate
 
     fake = faker.Faker('pt_BR')
     gerar_usuarios = True

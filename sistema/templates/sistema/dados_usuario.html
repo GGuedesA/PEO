@@ -1,0 +1,33 @@
+{% extends 'global/base.html' %}
+{% load static %}
+{% block content %}
+  <div class="container-fluid d-flex flex-column align-items-center">
+    <div class="content-usuario d-flex justify-content-center">
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-md-4">
+              {% if usuario.imagem != '' %}
+                <img src="/media/{{ usuario.imagem }}" class="card-img-top educator-img" alt="..." />
+              {% else %}
+                <img src="{% static 'global/imgs/profile-pic.svg' %}" class="card-img-top no-img" alt="..." />
+              {% endif %}
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <h4 class="card-title">{{ usuario.nome }}</h4>
+                    <a href="{% url 'sistema:editar_usuario' usuario.id %}">
+                        <button class="btn btn-primary" type="button">Editar</button>
+                    </a>
+                </div>
+                <p class="infos-usuario">Nome de usuário: <span class="dados-usuario">{{ usuario.nome_usuario }}</span></p>
+                <p class="infos-usuario">Email: <span class="dados-usuario">{{ usuario.email }}</span></p>
+                <p class="infos-usuario">Telefone: <span class="dados-usuario">{{ usuario.telefone }}</span></p>
+                <p class="infos-usuario">CPF: <span class="dados-usuario">{{ usuario.cpf }}</span></p>
+                <p class="infos-usuario">Data de nascimento: <span class="dados-usuario">{{ usuario.data_nascimento }}</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+,<h1>No login</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+    </form>
+{% endblock content %}

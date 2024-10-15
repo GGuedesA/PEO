@@ -5,9 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PEO - Projeto de Ensino Online</title>
+    <link rel="stylesheet" href="{% static 'global/css/reaproveitado.css' %}" />
     <link rel="stylesheet" href="{% static 'global/css/styles.css' %}" />
     <link rel="stylesheet" href="{% static 'global/css/bootstrap.min.css' %}" />
-    {% block includes %}{% endblock includes %}
+    {% block includes %}{% endblock includes %} 
   </head>
 
   <body>
@@ -33,8 +34,12 @@
               </li>
             </ul>
             <form class="d-flex div-btns">
-              <button class="btn btn-primary" type="submit">Login</button>
-              <button class="btn btn-outline-primary" type="submit">Cadastrar-se</button>
+              <a href="{% url "sistema:login" %}">
+                <button class="btn btn-primary" type="button">Login</button>
+              </a>
+              <a href="{% url "sistema:cadastro" %}">
+                <button class="btn btn-outline-primary" type="button">Cadastrar-se</button>
+              </a>
             </form>
           </div>
         </div>

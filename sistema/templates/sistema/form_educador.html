@@ -1,0 +1,44 @@
+{% extends 'global/base.html' %}
+
+{% block content %}
+  <div class="container d-md-flex flex-column align-items-center">
+    <div class="d-md-flex w-100 justify-content-center m-4 btns-forms">
+      <a href="{% url 'sistema:cadastro' %}"><button class="btn btn-primary" type="button">Estudante</button></a>
+      <a href="{% url 'sistema:cadastro_educador' %}"><button class="btn btn-primary" type="button">Educador</button></a>
+    </div>
+    <form action="{{ form_action }}" method="POST" enctype="multipart/form-data" class="form-usuario d-flex flex-wrap">
+      {% csrf_token %}
+      {% for field in form1 %}
+        <div class="form-group flex-md-wrap">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}
+            <p class="help-text">{{ field.help_text }}</p>
+          {% endif %}
+          {{ field.errors }}
+        </div>
+      {% endfor %}
+      {% for field in form2 %}
+        <div class="form-group flex-md-wrap">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}
+            <p class="help-text">{{ field.help_text }}</p>
+          {% endif %}
+          {{ field.errors }}
+        </div>
+      {% endfor %}
+      {% if form.non_field_errors %}
+        <div class="form-content">
+          <div class="form-group">
+            <div class="message error">{{ form.non_field_errors }}</div>
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="form-group btn-container">
+        <button class="btn btn-primary btn-submit" type="submit">Enviar</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}
