@@ -33,7 +33,7 @@ class Educador(models.Model):
     descricao = models.TextField(default='Sem descrição')
     tempo_aula = models.PositiveIntegerField(default=60)
     valor_aula = models.DecimalField(default=50, max_digits=5, decimal_places=2)
-    dias_horas_preferidas = models.TextField(null=True, blank=True)
+    dias_horas_preferidas = models.TextField(null=True, blank=True, default='todos:13-17')
     ativo = models.BooleanField(default=True)   
     areas = models.ManyToManyField(Area, related_name='educadores')
 

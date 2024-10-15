@@ -11,6 +11,8 @@
   </head>
 
   <body>
+    <div class="fundo">
+    </div>
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
         <a class="navbar-brand" href="/">PEO</a>
@@ -42,8 +44,8 @@
     <main class="container-fluid content">
       {% block content %}
       {% endblock %}
+      {% include 'global/partials/_pagination.html' %}
     </main>
-
     <!-- Incluindo o arquivo JS do Bootstrap -->
     <script src="{% static 'global/js/bootstrap.bundle.min.js' %}"></script>
   </body>
