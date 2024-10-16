@@ -1,5 +1,7 @@
 from django.urls import path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from sistema import views
+from sistema.views import MeView, CustomTokenBlacklistView
 
 app_name = 'sistema'
 
@@ -14,7 +16,8 @@ urlpatterns = [
     path('cadastro/', views.cadastro, name='cadastro'),
     path('cadastro/educador', views.criar_educador, name='cadastro_educador'),
 
-    path('login/', views.login, name='login'),
+    path('login/', TokenObtainPairView.as_view(), name='login'),
+    path('me/', MeView.as_view(), name='me'),
     
     path('usuario/<int:_id>/', views.dados_usuario, name='dados_usuario'),
     path('usuario/<int:_id>/editar', views.editar_usuario, name='editar_usuario'),

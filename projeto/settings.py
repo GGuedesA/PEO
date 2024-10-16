@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -139,3 +141,28 @@ try:
     from projeto.local_settings import *
 except ImportError:
     ...
+    
+AUTH_USER_MODEL = 'sistema.Usuario'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(
+        seconds=config("ACCESS_TOKEN_LIFETIME_SECONDS", cast = int)
+    ),
+    "REFRESH_TOKEN_LIFETIME": timedelta(
+        seconds=config("REFRESH_TOKEN_LIFETIME_SECONDS", cast=int)
+    ),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION":True,
+    "TOKEN_OBTAIN_SERIALIZER": "sistema.serializers.CustomTokenObtainPairSerializer",
+    "TOKEN_REFRESH_SERIALIZER": "sistema.serializers.CustomTokenRefreshSerializer",
+    "TOKEN_BLACKLIST_SERIALIZER": "sistema.serializers.CustomTokenBlacklistSerializer",
+}

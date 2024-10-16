@@ -3,6 +3,14 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from sistema.models import *
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from rest_framework_simplejwt.views import TokenBlacklistView
+
+from sistema.serializers import UsuarioSerializer, EducadorSerializer
+
 def index(request):
     return render(request, 'sistema/index.html', )
 
@@ -60,3 +68,28 @@ def dados_usuario(request, _id):
 
 def pagamentocartao(request):
     return render(request, 'sistema/pagamentocartao.html', )
+
+class MeView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        try:
+            usuario = request.user  
+            educador = Educador.objects.filter(usuario=usuario).first()
+
+            if educador:
+                serializer = EducadorSerializer(educador)
+            else:
+                serializer = UsuarioSerializer(usuario)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except Usuario.DoesNotExist:
+            return Response({"detail": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": f"Erro: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class CustomTokenBlacklistView(TokenBlacklistView):
+    def post(self, request, *args, **kwargs):
+        super().post(request, *args, **kwargs)
+        return Response(status=status.HTTP_205_RESET_CONTENT)

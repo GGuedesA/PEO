@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
+from django.contrib.auth import authenticate, login as auth_login
 from sistema.forms import *
 
 def cadastro(request):
@@ -28,9 +29,19 @@ def cadastro(request):
     return render(request, 'sistema/form_usuario.html', context)
 
 def login(request):
-    context = {
-    }
-    return render(request, 'sistema/login.html', context)
+    if request.method == 'POST':
+        nome_usuario = request.POST['nome_usuario']
+        senha = request.POST['senha']
+        
+        usuario = authenticate(request, nome_usuario=nome_usuario, password=senha)
+        
+        if usuario is not None:
+            auth_login(request, usuario)
+            return redirect('sistema:index')
+        else: 
+            return render(request, 'sistema/login.html', {'error': 'Credenciais inválidas.'})
+            
+    return render(request, 'sistema/login.html')
 
 def editar_usuario(request, _id):
     usuario = get_object_or_404(Usuario, pk=_id, ativo=True)
