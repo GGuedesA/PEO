@@ -3,6 +3,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from utils.custom_validators import cpf_validate, valida_data_nascimento
+from django.contrib.auth.hashers import make_password
 
 class UsuarioForm(forms.ModelForm):
     nome_usuario = forms.CharField(
@@ -13,9 +14,9 @@ class UsuarioForm(forms.ModelForm):
     )
     nome = forms.CharField()
     data_nascimento = forms.DateField(
-        widget=forms.DateInput(attrs = {'type': 'date'}),
+        widget=forms.DateInput(attrs={'type': 'date'}),
     )
-    email = forms.EmailField(required=False,)
+    email = forms.EmailField(required=False)
     telefone = forms.CharField(
         required=False, 
         validators=[RegexValidator(r'^\d{1,11}$')],
@@ -48,61 +49,48 @@ class UsuarioForm(forms.ModelForm):
         )
     )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     class Meta:
         model = Usuario
         fields = (
             'nome_usuario', 'nome',  
-            'email', 'data_nascimento', 'telefone','cpf',
-            'senha','confirmar_senha', 'imagem',
+            'email', 'data_nascimento', 'telefone', 'cpf',
+            'senha', 'confirmar_senha', 'imagem',
         )
 
     def clean(self):
+        super().clean()  # Chama o método clean da superclasse
         senha = self.cleaned_data.get('senha')
         confirmar_senha = self.cleaned_data.get('confirmar_senha')
-        if(senha != confirmar_senha):
-            self.add_error(
-                'confirmar_senha',
-                ValidationError(
-                    'As senhas não coincidem',
-                    code='invalid'
-                )
-            )
+        if senha != confirmar_senha:
+            self.add_error('confirmar_senha', ValidationError('As senhas não coincidem'))
         return super().clean()
-    
+
     def clean_cpf(self):
         cpf = self.cleaned_data.get('cpf')
-        if not cpf_validate(cpf):
-            self.add_error(
-                'cpf',
-                ValidationError(
-                    'CPF inválido',
-                    code='invalid'
-                )
-            )
+        if not cpf_validate(cpf):  # Supondo que você tenha essa função de validação
+            self.add_error('cpf', ValidationError('CPF inválido'))
         return cpf
     
     def clean_data_nascimento(self):
         data_nascimento = self.cleaned_data.get('data_nascimento')
-        if not valida_data_nascimento(data_nascimento):
-            self.add_error(
-                'data_nascimento',
-                ValidationError(
-                    'Apenas para maiores de 18 anos',
-                    code='invalid'
-                )
-            )
+        if not valida_data_nascimento(data_nascimento):  # Supondo que você tenha essa função de validação
+            self.add_error('data_nascimento', ValidationError('Apenas para maiores de 18 anos'))
         return data_nascimento
     
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if Usuario.objects.filter(email=email).exists():
-            self.add_error(
-                'email',
-                ValidationError('Email já cadastrado', code='invalid')
-            )
+            self.add_error('email', ValidationError('Email já cadastrado'))
+        return email
+    
+    def save(self, commit=True):
+        usuario = super().save(commit=False)
+        # Usa set_password para garantir que a senha seja salva de forma segura
+        usuario.set_password(self.cleaned_data['senha'])  # Define a senha usando o método correto
+        if commit:
+            usuario.save()
+        return usuario
+
 
 class EducadorForm(forms.ModelForm):
     minibio = forms.CharField(max_length=255, required=False, initial='Sem resumo')
@@ -120,3 +108,12 @@ class EducadorForm(forms.ModelForm):
             'minibio', 'descricao', 'tempo_aula', 
             'valor_aula', 'dias_horas_preferidas', 'areas',
         )
+        
+class LoginForm(forms.Form):
+    nome_usuario = forms.CharField(label="Nome de usuário")
+    senha = forms.CharField(widget=forms.PasswordInput)
+
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        self.fields['nome_usuario'].widget.attrs.update({'placeholder': 'Nome de usuário'})
+        self.fields['senha'].widget.attrs.update({'placeholder': 'Senha'})

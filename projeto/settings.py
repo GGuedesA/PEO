@@ -122,6 +122,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+AUTHENTICATION_BACKENDS = ['sistema.backends.UsuarioBackend']
+
+AUTH_USER_MODEL = 'sistema.Usuario'  # Define o modelo de usuário personalizado
+
 STATIC_URL = 'static/'
 STATICFILES_DIRS = (
     BASE_DIR / 'base_static',  # local static files directory
@@ -130,12 +134,13 @@ STATICFILES_DIRS = (
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+
+LOGIN_URL = '/login/'  # Redireciona para a home após login
+LOGIN_REDIRECT_URL = '/'  # Redireciona para a home após login
+LOGOUT_REDIRECT_URL = '/login/'  # Redireciona para a página de login após logout
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-try:
-    from projeto.local_settings import *
-except ImportError:
-    ...

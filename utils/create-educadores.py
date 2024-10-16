@@ -7,8 +7,8 @@ import django
 from django.conf import settings
 
 DJANGO_BASE_DIR = Path(__file__).parent.parent
-NUMBER_OF_EDUCATORS = 1000
-NUMBER_OF_USERS = int(NUMBER_OF_EDUCATORS * 1.3)
+NUMBER_OF_EDUCATORS = 30
+NUMBER_OF_USERS = NUMBER_OF_EDUCATORS
 
 sys.path.append(str(DJANGO_BASE_DIR))
 os.environ['DJANGO_SETTINGS_MODULE'] = 'projeto.settings'
@@ -21,6 +21,7 @@ if __name__ == '__main__':
     from random import randint, uniform, sample
     from sistema.models import Usuario, Educador, Area
     from utils.custom_validators import cpf_generate
+    from django.contrib.auth.hashers import make_password
 
     fake = faker.Faker('pt_BR')
     gerar_usuarios = True
@@ -40,7 +41,7 @@ if __name__ == '__main__':
             nome = profile['name']
             nascimento = profile['birthdate']
             cpf = fake.cpf()
-            senha = '12345678'
+            senha = make_password('12345678')
             telefone = fake.phone_number()
             created = fake.date_this_year()
 
@@ -52,7 +53,7 @@ if __name__ == '__main__':
                     telefone=telefone,
                     data_nascimento=nascimento,
                     cpf=cpf,
-                    senha=senha,
+                    password=senha,
                     created_at=created
                 )
             )

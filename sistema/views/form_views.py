@@ -27,11 +27,6 @@ def cadastro(request):
     }
     return render(request, 'sistema/form_usuario.html', context)
 
-def login(request):
-    context = {
-    }
-    return render(request, 'sistema/login.html', context)
-
 def editar_usuario(request, _id):
     usuario = get_object_or_404(Usuario, pk=_id, ativo=True)
     form_action = reverse('sistema:editar_usuario', args=(_id,))

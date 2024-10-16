@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from sistema.models import *
 
+@login_required
 def index(request):
     return render(request, 'sistema/index.html', )
 
@@ -50,6 +52,7 @@ def educador(request, _id):
     }
     return render(request, 'sistema/educador.html', context)
 
+@login_required
 def dados_usuario(request, _id):
     usuario = get_object_or_404(Usuario, id=_id, ativo=True)
     context = {
