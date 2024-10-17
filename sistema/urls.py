@@ -1,5 +1,8 @@
 from django.urls import path
 from sistema import views
+from django.contrib.auth.views import LoginView
+
+from sistema.forms import LoginForm
 
 app_name = 'sistema'
 
@@ -7,7 +10,7 @@ urlpatterns = [
     path('', views.index, name='index'),
 
     path('login/', views.user_login, name='login'),
-    path('logout/', views.logout, name='logout'),
+    path('logout/', views.user_logout, name='logout'),
 
     path('educadores/', views.educadores, name='educadores'),
     path('educadores/buscar/', views.buscar, name='buscar'),

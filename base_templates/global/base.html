@@ -34,12 +34,18 @@
               </li>
             </ul>
             <form class="d-flex div-btns">
+              {% if user.is_authenticated %}
+              <a href="{% url "sistema:logout" %}">
+                <button class="btn btn-danger" type="button">Sair</button>
+              </a>
+              {% else %}
               <a href="{% url "sistema:login" %}">
                 <button class="btn btn-primary" type="button">Login</button>
               </a>
               <a href="{% url "sistema:cadastro" %}">
                 <button class="btn btn-outline-primary" type="button">Cadastrar-se</button>
               </a>
+              {% endif %}
             </form>
           </div>
         </div>

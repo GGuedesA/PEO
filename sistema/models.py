@@ -4,19 +4,20 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager
 
 class UsuarioManager(BaseUserManager):
-    def create_user(self, nome_usuario, senha=None, **extra_fields):
+    def create_user(self, nome_usuario, password=None, **extra_fields):
         if not nome_usuario:
             raise ValueError('O campo nome de usuário é obrigatório')
         usuario = self.model(nome_usuario=nome_usuario, **extra_fields)
-        usuario.set_password(senha)  # Define a senha do usuário
+        usuario.set_password(password)  # Define a senha do usuário
         usuario.save(using=self._db)
         return usuario
 
-    def create_superuser(self, nome_usuario, senha=None, **extra_fields):
+    def create_superuser(self, nome_usuario, password=None, **extra_fields):
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
 
-        return self.create_user(nome_usuario, senha, **extra_fields)
+        print("Senha ->", password)
+        return self.create_user(nome_usuario, password, **extra_fields)
 
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
@@ -39,6 +40,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     objects = UsuarioManager()
 
     USERNAME_FIELD = 'nome_usuario'  # Define o campo que será usado para login
+    PASSWORD_FIELD = 'password' # Define o
     # REQUIRED_FIELDS = ['email']
 
     def __str__(self):
