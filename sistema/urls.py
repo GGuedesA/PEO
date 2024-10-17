@@ -1,8 +1,5 @@
 from django.urls import path
 from sistema import views
-from django.contrib.auth.views import LoginView
-
-from sistema.forms import LoginForm
 
 app_name = 'sistema'
 
@@ -24,5 +21,4 @@ urlpatterns = [
     path('usuario/<int:_id>/editar', views.editar_usuario, name='editar_usuario'),
     
     path('pagamentocartao/', views.pagamentocartao, name='pagamentocartao'),
-
 ]

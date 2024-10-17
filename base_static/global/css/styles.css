@@ -200,9 +200,12 @@ body {
   gap: 1.5rem;
 }
 
-.form-group {
+.form-group,
+.form-group input,
+.form-group textarea {
   width: 100%;
 }
+
 
 .btn-container {
   justify-content: end;
@@ -210,6 +213,12 @@ body {
 }
 .btn-submit {
   height: 3rem;
+}
+
+.span-horas {
+  display: flex;
+  gap: .9rem;
+  margin-bottom: 1.5rem;
 }
 
 .errorlist {
@@ -253,7 +262,12 @@ body {
 @media (min-width: 768px) {
   .form-group {
     width: 50%;
-    padding-inline: 0rem 1rem;
+  }
+  .form-group:nth-child(2n+1) {
+    padding-inline: .7rem 0rem;
+  }
+  .form-group:nth-child(2n) {
+    padding-inline: 0rem .7rem;
   }
 }
 

@@ -95,9 +95,13 @@ class UsuarioForm(forms.ModelForm):
 class EducadorForm(forms.ModelForm):
     minibio = forms.CharField(max_length=255, required=False, initial='Sem resumo')
     descricao = forms.CharField(widget=forms.Textarea, required=False, initial='Sem descrição')
-    tempo_aula = forms.IntegerField(min_value=1, initial=60)
+    tempo_aula = forms.IntegerField(min_value=1, initial=60, help_text="Coloque o tempo de cada aula em minutos")
     valor_aula = forms.DecimalField(max_digits=5, decimal_places=2, initial=50)
-    dias_horas_preferidas = forms.CharField(required=False, initial='todos:13-17')
+    dias_horas_preferidas = forms.CharField(
+        required=False, 
+        label="Horários disponíveis",
+        widget=forms.TextInput(attrs={'type': 'hidden'})
+    )
     
     # ManyToManyField de áreas, deve garantir que o queryset esteja correto
     areas = forms.ModelMultipleChoiceField(queryset=Area.objects.all(), required=False)
@@ -105,9 +109,19 @@ class EducadorForm(forms.ModelForm):
     class Meta:
         model = Educador
         fields = (
-            'minibio', 'descricao', 'tempo_aula', 
-            'valor_aula', 'dias_horas_preferidas', 'areas',
+            'minibio', 'tempo_aula', 
+            'valor_aula', 'descricao', 'dias_horas_preferidas', 'areas',
         )
+        
+    def clean_dias_horas_preferidas(self):
+        horarios = self.cleaned_data.get('dias_horas_preferidas')
+        if not horarios or horarios == "":
+            self.add_error(
+                'dias_horas_preferidas',
+                ValidationError('Insira pelo menos UM valor', code='invalid')
+            )
+
+        return horarios
         
 class LoginForm(forms.Form):
     nome_usuario = forms.CharField(label="Nome de usuário")
