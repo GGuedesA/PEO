@@ -5,7 +5,7 @@ from sistema.forms import *
 def cadastro(request):
     form_action = reverse('sistema:cadastro')
     if request.method == 'POST':
-        form = UsuarioForm(request.POST)
+        form = UsuarioForm(request.POST, files=request.FILES)
         context = {
             'form': form,
             'form_action': form_action,
@@ -37,7 +37,7 @@ def editar_usuario(request, _id):
     form_action = reverse('sistema:editar_usuario', args=(_id,))
 
     if request.method == 'POST':
-        form = UsuarioForm(request.POST, instance=usuario)
+        form = UsuarioForm(request.POST, instance=usuario, files=request.FILES)
         context = {
             'form': form,
             'form_action': form_action,
@@ -64,7 +64,7 @@ def criar_educador(request):
     form_action = reverse('sistema:cadastro_educador')  # URL da ação do formulário
     
     if request.method == 'POST':
-        usuario_form = UsuarioForm(request.POST)
+        usuario_form = UsuarioForm(request.POST, files=request.FILES)
         educador_form = EducadorForm(request.POST)
 
         if usuario_form.is_valid() and educador_form.is_valid():
@@ -106,7 +106,7 @@ def editar_educador(request, _id):
     
     if request.method == 'POST':
         # Instância do formulário com os dados do POST e do objeto Educador existente
-        usuario_form = UsuarioForm(request.POST, instance=educador.usuario)
+        usuario_form = UsuarioForm(request.POST, instance=educador.usuario, files=request.FILES)
         educador_form = EducadorForm(request.POST, instance=educador)
         
         context = {
@@ -140,3 +140,8 @@ def editar_educador(request, _id):
         'form_action': form_action,
     }
     return render(request, 'sistema/form_educador.html', context)
+
+
+def teste(request):
+    context={}
+    return render(request, 'sistema/teste.html', context)

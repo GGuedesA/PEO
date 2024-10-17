@@ -1,0 +1,17 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <select class="form-select form-select-sm mb-3" aria-label="Large select example">
+        <option value="todos" selected>Qualquer dia útil</option>
+        <option value="segunda">Segunda</option>
+        <option value="terca">Terça</option>
+        <option value="quarta">Quarta</option>
+        <option value="quinta">Quinta</option>
+        <option value="sexta">Sexta</option>
+    </select>
+    <input type="time" name="start_time" value="13:00"/>
+    <input type="time" name="end_time"  value="17:00"/>
+</form>
+{% endblock content %}

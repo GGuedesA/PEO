@@ -1,4 +1,5 @@
 {% extends 'global/base.html' %}
+{% load static %}
 
 {% block content %}
   <div class="container d-md-flex flex-column align-items-center">
@@ -20,12 +21,35 @@
       {% endfor %}
       {% for field in form2 %}
         <div class="form-group flex-md-wrap">
+          {% if field.name != 'dias_horas_preferidas' %}
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+              <p class="help-text">{{ field.help_text }}</p>
+            {% endif %}
+            {{ field.errors }}
+          {% else %}
           <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-          {{ field }}
-          {% if field.help_text %}
-            <p class="help-text">{{ field.help_text }}</p>
+            <div class="d-flex flex-column">
+              <select class="form-select form-select-sm mb-3 w-100" id="diasSelect">
+                <option value="todos" selected>Qualquer dia útil</option>
+                <option value="segunda">Segunda</option>
+                <option value="terca">Terça</option>
+                <option value="quarta">Quarta</option>
+                <option value="quinta">Quinta</option>
+                <option value="sexta">Sexta</option>
+              </select>
+              <span class="span-horas">
+                {{ field }}
+                <input type="time" id="startTime" name="start_time" value="13:00" class="w-50 p-2" />
+                <input type="time" id="endTime" name="end_time" value="17:00" class="w-50 p-2" />
+              </span>
+              <button class="btn btn-success btn-submit" type="button" id="addChip">Adicionar</button>
+              {{ field.errors }}
+              <!-- Div para os Chips -->
+              <div id="chipContainer" class="mt-3"></div>
+            </div>
           {% endif %}
-          {{ field.errors }}
         </div>
       {% endfor %}
       {% if form.non_field_errors %}
@@ -37,8 +61,24 @@
       {% endif %}
 
       <div class="form-group btn-container">
-        <button class="btn btn-primary btn-submit" type="submit">Enviar</button>
+        <button class="btn btn-primary btn-submit" type="submit" id="submitButton">Enviar</button>
       </div>
     </form>
+
   </div>
+
+  <style>
+    .chip {
+      display: inline-block;
+      padding: 5px 10px;
+      background-color: #007bff;
+      color: white;
+      border-radius: 16px;
+      margin: 5px;
+    }
+  </style>
 {% endblock %}
+
+{% block includes_bottom %}
+  <script src="{% static 'global/js/form_educador.js' %}"></script>
+{% endblock includes_bottom %}
