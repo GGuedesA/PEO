@@ -128,6 +128,7 @@ class LoginForm(forms.Form):
     senha = forms.CharField(widget=forms.PasswordInput)
 
     def __init__(self, request=None, *args, **kwargs):
+        print("To dentro do init:", request, *args, **kwargs)
         super(LoginForm, self).__init__(*args, **kwargs)
         self.fields['nome_usuario'].widget.attrs.update({'placeholder': 'Nome de usuário', 'autofocus': 'autofocus'})
         self.fields['senha'].widget.attrs.update({'placeholder': 'Senha'})

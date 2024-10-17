@@ -40,8 +40,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     objects = UsuarioManager()
 
     USERNAME_FIELD = 'nome_usuario'  # Define o campo que será usado para login
-    PASSWORD_FIELD = 'password' # Define o
-    # REQUIRED_FIELDS = ['email']
+    PASSWORD_FIELD = 'password'
 
     def __str__(self):
         return f'{self.nome_usuario}'

@@ -17,9 +17,14 @@
               <div class="card-body">
                 <div class="d-flex justify-content-between">
                   <h4 class="card-title">{{ educador.usuario.nome }}</h4>
-                  <a href="{% url 'sistema:editar_educador' educador.id %}">
-                      <button class="btn btn-primary" type="button">Editar</button>
-                  </a>
+                  {% if educador.usuario.id == user.id and user.is_authenticated %}
+                    <a href="{% url 'sistema:editar_educador' educador.id %}">
+                        <button class="btn btn-primary" type="button">Editar</button>
+                    </a>
+                    <a href="{% url 'sistema:dados_usuario' educador.usuario.id %}">
+                        <button class="btn btn-primary" type="button">Informações do usuário</button>
+                    </a>
+                  {% endif %}
               </div>
                 {% for area in areas %}
                     <span class="badge bg-primary">{{ area.nome }}</span>

@@ -31,6 +31,7 @@ if __name__ == '__main__':
     if(resetar_banco):
         Usuario.objects.all().delete()
         Educador.objects.all().delete()
+        Area.objects.all().delete()
 
     if(gerar_usuarios):
         users = []
@@ -92,6 +93,7 @@ if __name__ == '__main__':
                 ))
             Area.objects.bulk_create(areas_salvar)
         educadores = []
+        areas = list(Area.objects.all())
         for i in range(NUMBER_OF_EDUCATORS if len(usuarios_sem_educador) >= NUMBER_OF_EDUCATORS else len(usuarios_sem_educador)):
             qtd_areas = randint(1, 6)
             minibio = fake.text(max_nb_chars=255)

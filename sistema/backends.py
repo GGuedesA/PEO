@@ -6,14 +6,18 @@ import re
 
 class UsuarioBackend(BaseBackend):
     # Nome_usuario pode ser um email também
-    def authenticate(self, request, nome_usuario=None, senha=None, **kwargs):
+    def authenticate(self, request, username=None, password=None, **kwargs):
         try:
             rexp = r'^.+@.+\..+$'
-            if re.match(rexp, nome_usuario):
-                usuario = Usuario.objects.filter(email=nome_usuario).get()
+            print("TO NO AUTENTICATE CERTO AO MENOS")
+            if re.match(rexp, username):
+                print("DEU MATCH, TO CAÇANDO PELO EMAIL")
+                usuario = Usuario.objects.filter(email=username).get()
             else:
-                usuario = Usuario.objects.filter(nome_usuario=nome_usuario).get()
-            if check_password(senha, usuario.password):
+                print("DEU MATCH NÃO, TO CAÇANDO PELO username")
+                usuario = Usuario.objects.filter(nome_usuario=username).get()
+            print("A senha deu: ", check_password(password, usuario.password))
+            if check_password(password, usuario.password):
                 return usuario
         except Usuario.DoesNotExist:
             return None

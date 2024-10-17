@@ -122,7 +122,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-AUTHENTICATION_BACKENDS = ['sistema.backends.UsuarioBackend']
+AUTHENTICATION_BACKENDS = ['sistema.backends.UsuarioBackend', 'django.contrib.auth.backends.ModelBackend']
 
 AUTH_USER_MODEL = 'sistema.Usuario'  # Define o modelo de usuário personalizado
 
