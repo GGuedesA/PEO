@@ -1,4 +1,5 @@
 from sistema.models import *
+from datetime import datetime
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
@@ -128,7 +129,117 @@ class LoginForm(forms.Form):
     senha = forms.CharField(widget=forms.PasswordInput)
 
     def __init__(self, request=None, *args, **kwargs):
-        print("To dentro do init:", request, *args, **kwargs)
         super(LoginForm, self).__init__(*args, **kwargs)
         self.fields['nome_usuario'].widget.attrs.update({'placeholder': 'Nome de usuário', 'autofocus': 'autofocus'})
         self.fields['senha'].widget.attrs.update({'placeholder': 'Senha'})
+
+class AulaForm(forms.ModelForm):
+    data_aula = forms.DateField(widget=forms.TextInput(
+        attrs={'type': 'date'}
+    ))
+    horario_inicio = forms.TimeField(widget=forms.TimeInput(
+        attrs={'type': 'time'}
+    ))
+    horario_fim = forms.TimeField(widget=forms.TimeInput(
+        attrs={'type': 'time'}
+    ))
+    valor_aula = None
+    tempo_aula = None
+    estudante = None
+    educador = None
+
+    class Meta:
+        model = Aula
+        fields = (
+            'data_aula', 'horario_inicio', 'horario_fim',
+        )
+    
+    def __init__(self, *args, **kwargs):
+        self.estudante = kwargs.pop('estudante', None)
+        self.educador = kwargs.pop('educador', None)
+        self.valor_aula = self.educador.valor_aula
+        super(AulaForm, self).__init__(*args, **kwargs)
+    
+    def clean(self):
+        data_aula = self.cleaned_data.get('data_aula')
+        horario_inicio = self.cleaned_data.get('horario_inicio')
+        horario_fim = self.cleaned_data.get('horario_fim')
+
+         # Usa os atributos do formulário que foram passados no __init__
+        educador = self.educador
+        estudante = self.estudante
+
+        if not educador or not estudante:
+            raise ValidationError("Estudante ou Educador não fornecidos.")
+        
+        if horario_fim < horario_inicio:
+            self.add_error(
+                'horario_fim',
+                ValidationError("O horário de término da aula não pode ser antes do horário de início.", code="invalid")
+            )
+        
+        if horario_fim == horario_inicio:
+            self.add_error(
+                'horario_fim',
+                ValidationError("A aula não pode durar zero minutos.", code="invalid")
+            )
+        
+        self.valor_aula = educador.valor_aula
+
+        conflicting_aulas_estudante = Aula.objects.filter(
+            Q(
+                Q(horario_inicio__lte=horario_inicio, horario_fim__gt=horario_inicio) 
+                | 
+                Q(horario_inicio__lt=horario_fim, horario_fim__gte=horario_fim)
+            ),
+            estudante=estudante,
+            data_aula=data_aula,
+        )
+
+        # Verifica se já existe uma aula para o educador no mesmo dia e horário
+        conflicting_aulas_educador = Aula.objects.filter(
+            Q(
+                Q(horario_inicio__lte=horario_inicio, horario_fim__gt=horario_inicio) 
+                | 
+                Q(horario_inicio__lt=horario_fim, horario_fim__gte=horario_fim)
+            ),
+            educador=educador,
+            data_aula=data_aula,
+        )
+
+        if conflicting_aulas_estudante.exists():
+            self.add_error(
+                '',
+                ValidationError("Você já possui uma aula para esse horário.", code="invalid")
+            )
+        if conflicting_aulas_educador.exists():
+            self.add_error(
+                '',
+                ValidationError("Já existe uma aula agendada para esse educador neste horário.", code="invalid")
+            )
+
+        return super().clean()
+    
+    def clean_data_aula(self):
+        data_aula = self.cleaned_data.get('data_aula')
+        if data_aula < datetime.now().date():
+            self.add_error('data_aula', ValidationError('A data da aula não pode ser menor que hoje'))
+        if data_aula == datetime.now().date():
+            self.add_error('data_aula', ValidationError('A data da aula deve ser marcada com pelo menos um dia de antecedência'))
+        return data_aula
+    
+    def save(self, commit=True):
+        aula = super(AulaForm, self).save(commit=False)
+
+        # Garantir que os campos educador, estudante e valor_aula sejam preenchidos corretamente
+        aula.educador = self.educador
+        aula.estudante = self.estudante
+        aula.valor_aula = self.educador.valor_aula
+        dt1 = datetime.combine(datetime.now(), aula.horario_inicio)
+        dt2 = datetime.combine(datetime.now(), aula.horario_fim)
+        delta = dt2 - dt1
+        aula.tempo_aula = delta.total_seconds() // 60
+
+        if commit:
+            aula.save()
+        return aula

@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.forms import ValidationError
 from django.utils import timezone
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import BaseUserManager
 
 class UsuarioManager(BaseUserManager):
@@ -66,4 +68,50 @@ class Educador(models.Model):
 
     def __str__(self):
         return f"{self.usuario.nome_usuario} {self.usuario.cpf}"
+    
+class Aula(models.Model):
+    estudante = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="aulas")
+    educador = models.ForeignKey(Educador, on_delete=models.CASCADE, related_name="aulas")
+    valor_aula = models.DecimalField(max_digits=6, decimal_places=2)
+    tempo_aula = models.PositiveSmallIntegerField()
+    pago = models.BooleanField(default=False)
+    data_aula = models.DateField()
+    horario_inicio = models.TimeField()
+    horario_fim = models.TimeField()
+    situacao = models.IntegerField(choices=[
+        (0, 'Aguardando confirmação'),
+        (1, 'Confirmado pelo professor'),
+        (2, 'Aguardando pagamento'),
+        (3, 'Agendado'),
+        (4, 'Finalizado'),
+        (5, 'Cancelado'),
+        ],default=0,)
+    class Meta:
+        constraints = [
+            # Impedir sobreposição de aulas para o mesmo estudante
+            models.UniqueConstraint(
+                fields=['estudante', 'data_aula'],
+                name='unique_aula_estudante_horario',
+                condition=Q(
+                    # proibe o caso de "existe_inicio >= horario_inicio < existe_fim" para o estudante
+                    Q(horario_inicio__gte=models.F('horario_inicio'), horario_inicio__lt=models.F('horario_fim')) |
+                    # proibe o caso de "existe_inicio > horario_fim <= existe_fim" para o estudante
+                    Q(horario_fim__gt=models.F('horario_inicio'), horario_fim__lte=models.F('horario_fim'))
+                )
+            ),
+            # Impedir sobreposição de aulas para o mesmo educador
+            models.UniqueConstraint(
+                fields=['educador', 'data_aula'],
+                name='unique_aula_educador_horario',
+                condition=Q(
+                    # proibe o caso de "existe_inicio >= horario_inicio < existe_fim" para o educador
+                    Q(horario_inicio__gte=models.F('horario_inicio'), horario_inicio__lt=models.F('horario_fim')) |
+                    # proibe o caso de "existe_inicio > horario_fim <= existe_fim" para o educador
+                    Q(horario_fim__gt=models.F('horario_inicio'), horario_fim__lte=models.F('horario_fim'))
+                )
+            )
+        ]
+        
+    def __str__(self):
+        return f"Estudante: {self.estudante.nome} | Educador: {self.educador.usuario.nome}  dia: {self.data_aula} das {self.horario_inicio} até {self.horario_fim}"
     

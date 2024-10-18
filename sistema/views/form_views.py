@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from sistema.forms import *
 
@@ -135,3 +136,36 @@ def editar_educador(request, _id):
         'form_action': form_action,
     }
     return render(request, 'sistema/form_educador.html', context)
+
+@login_required
+def cadastrar_aula(request, educador_id):
+    educador = get_object_or_404(Educador, pk=educador_id, ativo=True)
+    estudante_id = request.user.id
+    estudante = get_object_or_404(Usuario, pk=estudante_id, ativo=True)
+    form_action = reverse('sistema:cadastrar_aula', args=(educador_id,))
+    if request.method == 'POST':
+        form = AulaForm(request.POST, educador=educador, estudante=estudante)
+        context = {
+            'form': form,
+            'form_action': form_action,
+        }
+
+        if(form.is_valid()):
+            aula = form.save(commit=False)
+            aula.educador = educador
+            aula.estudante = estudante
+            aula.save()
+            # return redirect('sistema:aulas_educador', educador_id=educador.pk)
+            return redirect('sistema:educador', _id=educador.pk)
+        
+        return render(
+            request,
+            'sistema/form_aula.html',
+            context
+        )
+    
+    context = {
+        'form': AulaForm(educador=educador, estudante=estudante),
+        'form_action': form_action,
+    }
+    return render(request, 'sistema/form_aula.html', context)

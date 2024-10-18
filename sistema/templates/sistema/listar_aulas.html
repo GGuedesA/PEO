@@ -1,0 +1,50 @@
+{% extends 'global/base.html' %}
+{% block content %}
+  <div class="container">
+    <h2>Minhas Aulas</h2>
+
+    {% if aulas_por_situacao %}
+      <div class="aulas-por-situacao">
+        {% for situacao, aulas in aulas_por_situacao.items %}
+          <div class="situacao-section">
+            <h3>
+              {% if situacao == 0 %} Aguardando confirmação {% endif %}
+              {% if situacao == 1 %} Confirmado {% endif %}
+              {% if situacao == 2 %} Aguardando pagamento {% endif %}
+              {% if situacao == 3 %} Agendado {% endif %}
+              {% if situacao == 4 %} Finalizado {% endif %}
+              {% if situacao == 5 %} Cancelado {% endif %}
+            </h3>
+
+            {% if aulas %}
+              <ul>
+                {% for aula in aulas %}
+                  <li>
+                    Aula com {{ aula.educador.usuario.nome }} no dia {{ aula.data_aula }} das {{ aula.horario_inicio }} até {{ aula.horario_fim }}
+                    {% if aula.situacao == 0 %}
+                      <span class="badge bg-warning">Aguardando confirmação</span>
+                    {% elif aula.situacao == 1 %}
+                      <span class="badge bg-success">Confirmado</span>
+                    {% elif aula.situacao == 2 %}
+                      <span class="badge bg-info">Aguardando pagamento</span>
+                    {% elif aula.situacao == 3 %}
+                      <span class="badge bg-primary">Agendado</span>
+                    {% elif aula.situacao == 4 %}
+                      <span class="badge bg-secondary">Finalizado</span>
+                    {% elif aula.situacao == 5 %}
+                      <span class="badge bg-danger">Cancelado</span>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p>Sem aulas nesta categoria.</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>Você ainda não possui aulas.</p>
+    {% endif %}
+  </div>
+{% endblock %}

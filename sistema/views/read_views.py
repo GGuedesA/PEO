@@ -1,3 +1,4 @@
+from collections import defaultdict
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -63,3 +64,29 @@ def dados_usuario(request, _id):
 
 def pagamentocartao(request):
     return render(request, 'sistema/pagamentocartao.html', )
+
+@login_required
+def listar_aulas(request):
+    usuario = request.user
+
+    # Filtrar as aulas do usuário logado (tanto como estudante quanto como educador)
+    aulas_como_estudante = Aula.objects.filter(estudante=usuario)
+    print(aulas_como_estudante)
+    aulas_como_educador = Aula.objects.filter(educador__usuario=usuario)
+    print(aulas_como_educador)
+
+    # Agrupar as aulas de acordo com a situação
+    aulas_por_situacao = defaultdict(list)
+
+    for aula in aulas_como_estudante:
+        aulas_por_situacao[aula.situacao].append(aula)
+
+    for aula in aulas_como_educador:
+        aulas_por_situacao[aula.situacao].append(aula)
+
+    # Passar o dicionário ao template
+    print(aulas_por_situacao)
+    context = {
+        'aulas_por_situacao': aulas_por_situacao,
+    }
+    return render(request, 'sistema/listar_aulas.html', context)

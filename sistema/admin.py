@@ -20,3 +20,8 @@ class UsuarioAdmin(admin.ModelAdmin):
 class EducadorAdmin(admin.ModelAdmin):
     list_display = 'id', 'usuario__nome', 'usuario__nome_usuario',
     search_fields = 'id', 'usuario__nome', 'usuario__nome_usuario',
+
+@admin.register(models.Aula)
+class AulaAdmin(admin.ModelAdmin):
+    list_display = 'id', 'estudante__nome', 'estudante__nome_usuario', 'educador__usuario__nome', 'educador__usuario__nome_usuario',
+    search_fields = 'id', 'estudante__nome', 'estudante__nome_usuario', 'educador__usuario__nome', 'educador__usuario__nome_usuario',
