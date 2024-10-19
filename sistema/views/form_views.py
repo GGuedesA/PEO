@@ -41,7 +41,6 @@ def editar_usuario(request, _id):
 
         if(form.is_valid()):
             usuario = form.save()
-            print("TO aqui, ó eu", usuario, usuario.pk)
             return redirect('sistema:dados_usuario', _id=usuario.pk)
 
         return render(

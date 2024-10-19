@@ -12,6 +12,8 @@ urlpatterns = [
     path('minhas_aulas/', views.listar_aulas, name='minhas_aulas'),
     path('minhas_aulas/<lista>/', views.listar_aulas, name='minhas_aulas'),
 
+    path('really?/', views.easter_egg, name='easter_egg'),
+
     path('educadores/', views.educadores, name='educadores'),
     path('educadores/buscar/', views.buscar, name='buscar'),
     path('educador/<int:_id>/', views.educador, name='educador'),

@@ -69,17 +69,17 @@ def pagamentocartao(request):
 def listar_aulas(request, lista=None):
     usuario = request.user
 
-    if(lista == None):
-        if(Educador.objects.filter(usuario=usuario).exists()): 
-            lista = 1
-        else:
-            lista = 0
-
-    print(lista, type(lista))
-    if lista == '0' or lista == 0:
-        aulas = Aula.objects.filter(estudante=usuario).order_by('-data_aula').order_by('horario_inicio')
+    if(usuario.eh_educador): 
+        lista = '1' if lista != '0' else '0'
     else:
-        aulas = Aula.objects.filter(educador__usuario=usuario).order_by('-data_aula').order_by('horario_inicio')
+        if(lista != None):
+            return redirect('sistema:easter_egg')
+        lista = '0'
+
+    if lista == '0':
+        aulas = Aula.objects.filter(estudante=usuario)
+    else:
+        aulas = Aula.objects.filter(educador__usuario=usuario)
 
     situacoes_styles = get_situacoes_styles()
     situacoes = get_situacoes_choices()
@@ -95,3 +95,7 @@ def listar_aulas(request, lista=None):
         'lista': lista,
     }
     return render(request, 'sistema/listar_aulas.html', context)
+
+
+def easter_egg(request):
+    return render(request, 'sistema/easter_egg.html', )

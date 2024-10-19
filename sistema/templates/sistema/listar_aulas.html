@@ -6,14 +6,12 @@
 {% endblock %}
 {% block content %}
   <div class="container container-aulas">
-    <div class="div-btns">
-      <a href="{% url 'sistema:minhas_aulas' 0 %}">
-        <button class="btn btn-primary" type="button">Estudante</button>
-      </a>
-      <a href="{% url 'sistema:minhas_aulas' 1 %}">
-        <button class="btn btn-success" type="button">Educador</button>
-      </a>
-    </div>
+    {% if user.eh_educador %}
+      <div class="div-btns">
+        <a href="{% url 'sistema:minhas_aulas' 0 %}"><button class="btn btn-primary" type="button">Estudante</button></a>
+        <a href="{% url 'sistema:minhas_aulas' 1 %}"><button class="btn btn-success" type="button">Educador</button></a>
+      </div>
+    {% endif %}
     {% if lista == '0' %}
       <h2>Minhas Aulas: Estudante</h2>
     {% else %}
@@ -32,7 +30,11 @@
             <ul class="lista-aulas">
               {% for aula in aulas %}
                 <li class="aula-item">
-                  Aula com {{ aula.educador.usuario.nome }} no dia {{ aula.data_aula }} das {{ aula.horario_inicio }} até {{ aula.horario_fim }} <span class="badge {{ situacoes_styles|get_item:aula.situacao }}">{{ situacoes|get_item:aula.situacao }}</span>
+                  {% if lista == '0' %}
+                    Aula com {{ aula.educador.usuario.nome }} no dia {{ aula.data_aula }} das {{ aula.horario_inicio }} até {{ aula.horario_fim }} <span class="badge {{ situacoes_styles|get_item:aula.situacao }}">{{ situacoes|get_item:aula.situacao }}</span>
+                  {% else %}
+                    Aula com {{ aula.estudante.nome }} no dia {{ aula.data_aula }} das {{ aula.horario_inicio }} até {{ aula.horario_fim }} <span class="badge {{ situacoes_styles|get_item:aula.situacao }}">{{ situacoes|get_item:aula.situacao }}</span>
+                  {% endif %}
                 </li>
               {% endfor %}
             </ul>

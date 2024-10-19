@@ -49,6 +49,7 @@ class UsuarioForm(forms.ModelForm):
             }
         )
     )
+    eh_educador = False
 
     class Meta:
         model = Usuario
@@ -57,6 +58,10 @@ class UsuarioForm(forms.ModelForm):
             'email', 'data_nascimento', 'telefone', 'cpf',
             'senha', 'confirmar_senha', 'imagem',
         )
+
+    def __init__(self, *args, **kwargs):
+        self.eh_educador = kwargs.pop('eh_educador', False)
+        super(AulaForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         super().clean()  # Chama o método clean da superclasse
@@ -86,6 +91,7 @@ class UsuarioForm(forms.ModelForm):
     
     def save(self, commit=True):
         usuario = super().save(commit=False)
+        usuario.eh_educador = self.eh_educador
         # Usa set_password para garantir que a senha seja salva de forma segura
         usuario.set_password(self.cleaned_data['senha'])  # Define a senha usando o método correto
         if commit:

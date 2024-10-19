@@ -18,7 +18,6 @@ class UsuarioManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
 
-        print("Senha ->", password)
         return self.create_user(nome_usuario, password, **extra_fields)
 
 
@@ -32,6 +31,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(default=timezone.now)
     ativo = models.BooleanField(default=True)   
     imagem = models.ImageField(blank=True, null=True, upload_to='pictures/%Y/%m/%d/')
+    eh_educador = models.BooleanField(default=False)
     
     # Campos necessários para o Django
     is_staff = models.BooleanField(default=False)
@@ -79,7 +79,6 @@ def get_situacoes():
         'Finalizado'               : 'categoria-finalizado',
         'Negado'                   : 'categoria-negado',
         'Cancelado'                : 'categoria-cancelado',
-        'Teste'                    : "ta funfando pa krl"
     }
 
 def get_situacoes_choices():
