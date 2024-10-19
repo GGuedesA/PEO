@@ -1,4 +1,3 @@
-from collections import defaultdict
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -65,28 +64,34 @@ def dados_usuario(request, _id):
 def pagamentocartao(request):
     return render(request, 'sistema/pagamentocartao.html', )
 
+# Lista aqui se refere a se é pra lista como estudante ou como educador, 0 para estudante e 1 para educador
 @login_required
-def listar_aulas(request):
+def listar_aulas(request, lista=None):
     usuario = request.user
 
-    # Filtrar as aulas do usuário logado (tanto como estudante quanto como educador)
-    aulas_como_estudante = Aula.objects.filter(estudante=usuario)
-    print(aulas_como_estudante)
-    aulas_como_educador = Aula.objects.filter(educador__usuario=usuario)
-    print(aulas_como_educador)
+    if(lista == None):
+        if(Educador.objects.filter(usuario=usuario).exists()): 
+            lista = 1
+        else:
+            lista = 0
 
-    # Agrupar as aulas de acordo com a situação
-    aulas_por_situacao = defaultdict(list)
+    print(lista, type(lista))
+    if lista == '0' or lista == 0:
+        aulas = Aula.objects.filter(estudante=usuario).order_by('-data_aula').order_by('horario_inicio')
+    else:
+        aulas = Aula.objects.filter(educador__usuario=usuario).order_by('-data_aula').order_by('horario_inicio')
 
-    for aula in aulas_como_estudante:
+    situacoes_styles = get_situacoes_styles()
+    situacoes = get_situacoes_choices()
+    aulas_por_situacao = {chave: [] for chave in situacoes.keys()}
+
+    for aula in aulas:
         aulas_por_situacao[aula.situacao].append(aula)
 
-    for aula in aulas_como_educador:
-        aulas_por_situacao[aula.situacao].append(aula)
-
-    # Passar o dicionário ao template
-    print(aulas_por_situacao)
     context = {
         'aulas_por_situacao': aulas_por_situacao,
+        'situacoes': situacoes,
+        'situacoes_styles': situacoes_styles,
+        'lista': lista,
     }
     return render(request, 'sistema/listar_aulas.html', context)

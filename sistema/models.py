@@ -69,23 +69,35 @@ class Educador(models.Model):
     def __str__(self):
         return f"{self.usuario.nome_usuario} {self.usuario.cpf}"
     
+
+def get_situacoes():
+    return {
+        'Aguardando confirmação'   : 'categoria-confirmar',
+        'Confirmado pelo professor': 'categoria-confirmado',
+        'Aguardando pagamento'     : 'categoria-pagar',
+        'Agendado'                 : 'categoria-agendado',
+        'Finalizado'               : 'categoria-finalizado',
+        'Negado'                   : 'categoria-negado',
+        'Cancelado'                : 'categoria-cancelado',
+        'Teste'                    : "ta funfando pa krl"
+    }
+
+def get_situacoes_choices():
+    return {i: chave for i, chave in enumerate(get_situacoes())}
+
+def get_situacoes_styles():
+    return {i: valor for i, valor in enumerate(get_situacoes().values())}
+    
 class Aula(models.Model):
-    estudante = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="aulas")
-    educador = models.ForeignKey(Educador, on_delete=models.CASCADE, related_name="aulas")
+    estudante = models.ForeignKey(Usuario, on_delete=models.RESTRICT, related_name="aulas")
+    educador = models.ForeignKey(Educador, on_delete=models.RESTRICT, related_name="aulas")
     valor_aula = models.DecimalField(max_digits=6, decimal_places=2)
     tempo_aula = models.PositiveSmallIntegerField()
     pago = models.BooleanField(default=False)
     data_aula = models.DateField()
     horario_inicio = models.TimeField()
     horario_fim = models.TimeField()
-    situacao = models.IntegerField(choices=[
-        (0, 'Aguardando confirmação'),
-        (1, 'Confirmado pelo professor'),
-        (2, 'Aguardando pagamento'),
-        (3, 'Agendado'),
-        (4, 'Finalizado'),
-        (5, 'Cancelado'),
-        ],default=0,)
+    situacao = models.IntegerField(choices=get_situacoes_choices, default=0,)
     class Meta:
         constraints = [
             # Impedir sobreposição de aulas para o mesmo estudante
