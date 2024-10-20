@@ -38,8 +38,12 @@
                 <a class="nav-link" href="#">Contatos</a>
               </li>
             </ul>
-            <form class="d-flex div-btns">
+            <form class="d-flex div-btns align-items-center">
               {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url "sistema:dados_usuario" user.id %}">Perfil</a>
+              </li>
+              
               <a href="{% url "sistema:logout" %}">
                 <button class="btn btn-danger" type="button">Sair</button>
               </a>

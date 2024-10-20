@@ -9,7 +9,10 @@ def index(request):
     return render(request, 'sistema/index.html', )
 
 def educadores(request):
-    educadores = Educador.objects.all().filter(ativo=True).order_by('-id')
+    if request.user.is_authenticated and request.user.eh_educador:
+        educadores = Educador.objects.all().filter(ativo=True).order_by('-id').exclude(usuario=request.user)
+    else:
+        educadores = Educador.objects.all().filter(ativo=True).order_by('-id')
     paginator = Paginator(educadores, 25)
 
     page_number = request.GET.get("page")
@@ -55,8 +58,16 @@ def educador(request, _id):
 @login_required
 def dados_usuario(request, _id):
     usuario = get_object_or_404(Usuario, id=_id, ativo=True)
+    educador = None
+    areas = []
+    if usuario.eh_educador:
+        educador = Educador.objects.get(usuario=usuario)
+        areas = educador.areas.all()
     context = {
         'usuario': usuario,
+        'eh_educador': usuario.eh_educador,
+        'educador': educador,
+        'areas': areas,
     }
     return render(request, 'sistema/dados_usuario.html', context)
 

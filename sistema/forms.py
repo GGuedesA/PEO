@@ -25,7 +25,6 @@ class UsuarioForm(forms.ModelForm):
     )
     cpf = forms.CharField(
         label="CPF",
-        validators=[RegexValidator(r'^\d{1,11}$')],
         help_text="Entre apenas com os números"
     )
     senha = forms.CharField(
@@ -61,7 +60,7 @@ class UsuarioForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.eh_educador = kwargs.pop('eh_educador', False)
-        super(AulaForm, self).__init__(*args, **kwargs)
+        super(UsuarioForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         super().clean()  # Chama o método clean da superclasse
@@ -73,9 +72,14 @@ class UsuarioForm(forms.ModelForm):
 
     def clean_cpf(self):
         cpf = self.cleaned_data.get('cpf')
+        if(len(cpf) > 14):
+            self.add_error('cpf', ValidationError('Tamanho do CPF inserido muito grande'))
+        #  Obtém os números do CPF e ignora outros caracteres
+        cpf = [int(char) for char in str(cpf) if char.isdigit()]
         if not cpf_validate(cpf):  # Supondo que você tenha essa função de validação
             self.add_error('cpf', ValidationError('CPF inválido'))
-        return cpf
+        cpf_validado = ''.join(map(str, cpf))
+        return cpf_validado
     
     def clean_data_nascimento(self):
         data_nascimento = self.cleaned_data.get('data_nascimento')
@@ -92,6 +96,11 @@ class UsuarioForm(forms.ModelForm):
     def save(self, commit=True):
         usuario = super().save(commit=False)
         usuario.eh_educador = self.eh_educador
+        print("To aqui, to aqui to aqui")
+        print("To aqui, to aqui to aqui")
+        print("To aqui, to aqui to aqui")
+        print(self.eh_educador)
+        print(usuario.eh_educador)
         # Usa set_password para garantir que a senha seja salva de forma segura
         usuario.set_password(self.cleaned_data['senha'])  # Define a senha usando o método correto
         if commit:
@@ -100,10 +109,29 @@ class UsuarioForm(forms.ModelForm):
 
 
 class EducadorForm(forms.ModelForm):
-    minibio = forms.CharField(max_length=255, required=False, initial='Sem resumo')
-    descricao = forms.CharField(widget=forms.Textarea, required=False, initial='Sem descrição')
-    tempo_aula = forms.IntegerField(min_value=1, initial=60, help_text="Coloque o tempo de cada aula em minutos")
-    valor_aula = forms.DecimalField(max_digits=5, decimal_places=2, initial=50)
+    minibio = forms.CharField(
+        max_length=255, 
+        required=False, 
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Sem resumo'}
+        )
+    )
+    descricao = forms.CharField(
+        widget=forms.Textarea(
+            attrs={'placeholder': 'Sem Descrição'}
+        ), 
+        required=False, 
+    )
+    tempo_aula = forms.IntegerField(
+        min_value=1, 
+        initial=60, 
+        help_text="Coloque o tempo de cada aula em minutos"
+    )
+    valor_aula = forms.DecimalField(
+        max_digits=5, 
+        decimal_places=2, 
+        initial=50
+    )
     dias_horas_preferidas = forms.CharField(
         required=False, 
         label="Horários disponíveis",
@@ -111,7 +139,9 @@ class EducadorForm(forms.ModelForm):
     )
     
     # ManyToManyField de áreas, deve garantir que o queryset esteja correto
-    areas = forms.ModelMultipleChoiceField(queryset=Area.objects.all(), required=False)
+    areas = forms.ModelMultipleChoiceField(
+        queryset=Area.objects.all(), required=False
+    )
 
     class Meta:
         model = Educador

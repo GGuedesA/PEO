@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
   <div class="container-fluid d-flex flex-column align-items-center">
-    <div class="content-usuario d-flex justify-content-center">
+    <div class="content-usuario d-flex flex-column flex-lg-row justify-content-center between">
       <div class="card mb-3">
         <div class="row g-0">
           <div class="col-md-4">
@@ -16,7 +16,13 @@
             <div class="card-body">
               <div class="d-flex justify-content-between">
                 <h4 class="card-title">{{ usuario.nome }}</h4>
-                <a href="{% url 'sistema:editar_usuario' usuario.id %}"><button class="btn btn-primary" type="button">Editar</button></a>
+                {% if usuario.eh_educador %}
+                  <a href="{% url 'sistema:editar_educador' educador.id %}">
+                {% else %}
+                  <a href="{% url 'sistema:editar_usuario' usuario.id %}">
+                {% endif %}
+                  <button class="btn btn-primary" type="button">Editar</button>
+                </a>
               </div>
               <p class="infos-usuario">
                 Nome de usuário: <span class="dados-usuario">{{ usuario.nome_usuario }}</span>
@@ -35,8 +41,35 @@
               </p>
             </div>
           </div>
+          <div class="col-md-12 p-2">
+            <div class="area-badges mb-3">
+              {% if areas %}
+                {% for area in areas %}
+                  <span class="badge bg-primary">{{ area.nome }}</span>
+                {% endfor %}
+              {% else %}
+                <span class="badge bg-primary">Nenhuma área cadastrada</span>
+              {% endif %}
+            </div>
+            <h3>Minibio:</h3>
+            <div class="minibio w-100 p-3">
+              <p class="card-text">{{ educador.minibio }}</p>
+            </div>
+            <h3>Descrição:</h3>
+            <div class="minibio w-100 p-3">
+              <p class="card-text">{{ educador.descricao }}</p>
+            </div>
+          </div>
         </div>
       </div>
+      <div class="dados-aula d-flex flex-column align-items-center">
+        <span class="d-flex flex-column align-items-center">
+            <h2>Valor Aula</h2>
+            <h5>R$ {{ educador.valor_aula }}</h5>
+            <h2>Tempo Aula</h2>
+            <h5>{{ educador.tempo_aula }} minutos</h5>
+        </span>
+    </div>
     </div>
   </div>
 {% endblock %}

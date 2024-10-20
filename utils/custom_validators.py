@@ -2,10 +2,7 @@ from random import randint
 from datetime import date, datetime, timedelta
 
 
-def cpf_validate(numbers):
-    #  Obtém os números do CPF e ignora outros caracteres
-    cpf = [int(char) for char in str(numbers) if char.isdigit()]
-
+def cpf_validate(cpf):
     #  Verifica se o CPF tem 11 dígitos
     if len(cpf) != 11:
         return False

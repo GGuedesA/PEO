@@ -1,0 +1,44 @@
+EDUCADOR:
+- definir os horários possíveis no cadastro - X
+
+
+LOGIN:
+- esconder botões de login/cadastro - X
+- aparecer botão de informações próprias - x
+
+
+adicionar SALDO na conta do usuário e uma tela de recarga
+
+
+AULAS:
+- cadastro de aula, pegar o id do estudante pelo usuário ativo - x
+- listagem de aulas, agrupado por situação - x
+- não permitir cadastro de aulas no mesmo horário pro mesmo estudante nem educador - X
+- fluxo de aula:
+  - estudante escolhe dia e horário e envia pro professor - x
+  - professor verifica se aceita o dia e horário, caso negue a aula fica como negada pelo professor
+  - professor modifica o valor de acordo com o dia e horário
+  - aluno escolhe se vai aceitar esse valor, caso contrário, a aula fica como negada pelo aluno
+  - telas de pagamento fake
+  - Aula após tela de pagamento fica como "agendada"
+  - tanto o professor quanto o aluno podem cancelar a aula a qualquer momento com até 3 horas de antecedência (o estorno sempre irá para a conta do aluno dentro do site)
+  - dado o horário, o educador clica no botão de iniciar a aula (o botão ficaria disponível em 15 minutos antes da aula começar)
+  - dado o término da aula, o educador clica para marcar como concluída
+  - próxima vez que abrir a tela de "minhas aulas" tanto o educador como o estudante, percorrer a lista de aulas conferindo o horário e alterando para cancelada caso 
+
+
+***observações:
+- formulário de edição:
+  - senha está sendo requisitada novamente
+  - permitindo editar o cpf e data de nascimento
+
+- forma de desativar os usuários E educadores:
+  - ao desativar usuário, desativar o educador vinculado
+  - ao desativar educador, manter usuário
+
+- proteger as rotas (sim, está escrito de maneira genérica mesmo)
+
+    
+APÓS ISSO (se sobrar tempo):
+ - reunião (vulgo começar aula)
+ - api de pagamentos
