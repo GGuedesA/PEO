@@ -9,10 +9,10 @@ def index(request):
     return render(request, 'sistema/index.html', )
 
 def educadores(request):
+    educadores = Educador.objects.all().filter(ativo=True).order_by('-id')
     if request.user.is_authenticated and request.user.eh_educador:
-        educadores = Educador.objects.all().filter(ativo=True).order_by('-id').exclude(usuario=request.user)
-    else:
-        educadores = Educador.objects.all().filter(ativo=True).order_by('-id')
+        educadores = educadores.exclude(usuario=request.user)
+
     paginator = Paginator(educadores, 25)
 
     page_number = request.GET.get("page")
@@ -33,9 +33,15 @@ def buscar(request):
                         usuario__ativo=True
                     )\
                     .filter(
-                        Q(usuario__nome_usuario__icontains=busca) | 
+                        # linha criada inicialmente para aprendizado e teste,
+                        # como o nome de usuário é oculto, ela foi comentada
+                        # Q(usuario__nome_usuario__icontains=busca) |
                         Q(usuario__nome__icontains=busca)
                     ).order_by('-id')
+    
+    if request.user.is_authenticated and request.user.eh_educador:
+        educadores = educadores.exclude(request.user)
+
     paginator = Paginator(educadores, 25)
 
     page_number = request.GET.get("page")
@@ -48,6 +54,8 @@ def buscar(request):
 
 def educador(request, _id):
     single_educador = get_object_or_404(Educador, id=_id, ativo=True)
+    if request.user.is_authenticated and request.user.educador_set.first() == single_educador:
+        return redirect('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
     areas = single_educador.areas.all()
     context = {
         'educador': single_educador,

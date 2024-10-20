@@ -158,7 +158,7 @@ body {
   color: white;
 }
 
-.content-single-educador,
+.dados-single-educador,
 .content-usuario,
 .descricao-educador {
   width: 80%;
@@ -263,6 +263,13 @@ body {
     align-items: center;
     width: 100%;
   }
+  
+  .dados-single-educador {
+    flex-direction: column;
+    align-items: center;
+    padding: 0 !important;
+    max-width: 100%;
+  }
 
   .dados-aula {
     width: 100%;
@@ -300,5 +307,9 @@ body {
   .content-educadores {
     width: 80%;
     grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+  }
+  .content-single-educador{
+    width: fit-content;
+    max-width: 80%;
   }
 }
