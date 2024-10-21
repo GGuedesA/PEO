@@ -96,11 +96,6 @@ class UsuarioForm(forms.ModelForm):
     def save(self, commit=True):
         usuario = super().save(commit=False)
         usuario.eh_educador = self.eh_educador
-        print("To aqui, to aqui to aqui")
-        print("To aqui, to aqui to aqui")
-        print("To aqui, to aqui to aqui")
-        print(self.eh_educador)
-        print(usuario.eh_educador)
         # Usa set_password para garantir que a senha seja salva de forma segura
         usuario.set_password(self.cleaned_data['senha'])  # Define a senha usando o método correto
         if commit:
@@ -159,6 +154,14 @@ class EducadorForm(forms.ModelForm):
             )
 
         return horarios
+    
+    def clean_minibio(self):
+        minibio = self.cleaned_data.get('minibio')
+        return minibio if minibio != "" else "Sem resumo fornecido"
+    
+    def clean_descricao(self):
+        descricao = self.cleaned_data.get('descricao')
+        return descricao if descricao != "" else "Sem descrição fornecida"
         
 class LoginForm(forms.Form):
     nome_usuario = forms.CharField(label="Nome de usuário")

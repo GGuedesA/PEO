@@ -19,7 +19,7 @@ django.setup()
 if __name__ == '__main__':
     import faker
     from random import randint, uniform, sample
-    from sistema.models import Usuario, Educador, Area
+    from sistema.models import *
     from utils.custom_validators import cpf_generate
     from django.contrib.auth.hashers import make_password
 
@@ -29,9 +29,10 @@ if __name__ == '__main__':
 
     resetar_banco = True
     if(resetar_banco):
-        Usuario.objects.all().delete()
-        Educador.objects.all().delete()
         Area.objects.all().delete()
+        Aula.objects.all().delete()
+        Educador.objects.all().delete()
+        Usuario.objects.all().delete()
 
     if(gerar_usuarios):
         users = []
@@ -110,3 +111,37 @@ if __name__ == '__main__':
                 )
             novo_educador.save()
             novo_educador.areas.set(areas_educador)
+    
+    if resetar_banco:
+        adm = Usuario(
+            nome_usuario='admin',
+            nome='Administrador',
+            email='admin@email.com',
+            telefone='(11) 99999-9999',
+            data_nascimento=datetime(1990, 1, 1),
+            cpf='12345678901',
+            password=make_password('admin'),
+            created_at=datetime.now(),
+            is_superuser=True,
+            is_staff=True
+        )
+        adm.save()
+        educ1_user = Usuario(
+            nome_usuario='educ1',
+            nome='Educador 1 de testes',
+            email='educ1@email.com',
+            telefone='(11) 98765-4321',
+            data_nascimento=datetime(1995, 6, 15),
+            cpf='98765432109',
+            password=make_password('educ1'),
+            created_at=datetime.now()
+        )
+        educ1 = Educador(
+            usuario=educ1_user,
+            minibio='Minibio do educador 1',
+            descricao='Descrição do educador 1',
+            tempo_aula=45,
+            valor_aula=80.00
+        )
+        educ1_user.save()
+        educ1.save()

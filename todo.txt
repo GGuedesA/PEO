@@ -42,3 +42,5 @@ AULAS:
 APÓS ISSO (se sobrar tempo):
  - reunião (vulgo começar aula)
  - api de pagamentos
+ - colocar um histórico das transações, recargas, aulas, etc
+ - ao trocar de tela na tela de cadastro, levar os dados em comum junto

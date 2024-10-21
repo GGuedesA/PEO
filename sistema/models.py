@@ -32,6 +32,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     ativo = models.BooleanField(default=True)   
     imagem = models.ImageField(blank=True, null=True, upload_to='pictures/%Y/%m/%d/')
     eh_educador = models.BooleanField(default=False)
+    saldo = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     
     # Campos necessários para o Django
     is_staff = models.BooleanField(default=False)
@@ -57,7 +58,7 @@ class Area(models.Model):
 class Educador(models.Model):
     class Meta:
         verbose_name_plural = "educadores"
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, null=True, related_name="educador")
     minibio = models.CharField(max_length=255, default='Sem resumo')
     descricao = models.TextField(default='Sem descrição')
     tempo_aula = models.PositiveIntegerField(default=60)
@@ -69,8 +70,15 @@ class Educador(models.Model):
     def __str__(self):
         return f"{self.usuario.nome_usuario} {self.usuario.cpf}"
     
+    def save(self, *args, **kwargs):
+        self.usuario.eh_educador = True
+        super(Educador, self).save(*args, **kwargs)
+        self.usuario.save()
+    
 
 def get_situacoes():
+    # Essa função define as situações das aulas, na esquerda a forma "human readable" do choices e na direita ficam 
+    # as tags css que serão renderizadas, estilize elas através do arquivo styles-aulas.css dentro do static global
     return {
         'Aguardando confirmação'   : 'categoria-confirmar',
         'Confirmado pelo professor': 'categoria-confirmado',
@@ -82,9 +90,11 @@ def get_situacoes():
     }
 
 def get_situacoes_choices():
+    # essa função pega a de cima e gera um dicionário como o indice como chave e o human readable como valor
     return {i: chave for i, chave in enumerate(get_situacoes())}
 
 def get_situacoes_styles():
+    # essa função pega a de cima e gera um dicionário como o indice como chave e as tags css como valor
     return {i: valor for i, valor in enumerate(get_situacoes().values())}
     
 class Aula(models.Model):
