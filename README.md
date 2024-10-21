@@ -102,10 +102,15 @@ python3 utils\create-educadores.py
 ---
 <i>Haverá já um superusuário criado e também um educador.<i/>
 > **Super usuário**:
+>
 > `login:` admin 
+>
 > `senha:` admin 
+>
 > **Educador**:
+>
 > `login:` educ1 
+>
 > `senha:` educ1 
 --- 
 
