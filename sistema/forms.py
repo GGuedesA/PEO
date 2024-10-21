@@ -102,6 +102,49 @@ class UsuarioForm(forms.ModelForm):
             usuario.save()
         return usuario
 
+class UsuarioUpdateForm(forms.ModelForm):
+    id = None
+    nome_usuario = forms.CharField(
+        label="Nome de usuário",
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Nome Usuário'}
+        ),
+    )
+    email = forms.EmailField(required=False)
+    telefone = forms.CharField(
+        required=False, 
+        help_text='Entre apenas com os números'
+    )
+    imagem = forms.ImageField(
+        required=False,
+        label='Foto de perfil',                      
+        widget=forms.FileInput(
+            attrs={
+                'accept': 'image/*'
+            }
+        )
+    )
+    eh_educador = False
+
+    class Meta:
+        model = Usuario
+        fields = (
+            'nome_usuario', 'email', 
+            'telefone', 'imagem',
+        )
+
+    def __init__(self, *args, **kwargs):
+        usuario = kwargs.get('instance', None)
+        self.id = usuario.id
+        self.eh_educador = kwargs.pop('eh_educador', False)
+        super(UsuarioUpdateForm, self).__init__(*args, **kwargs)
+    
+    def clean_email(self):
+        id = self.id
+        email = self.cleaned_data.get('email')
+        if Usuario.objects.filter(email=email).exclude(pk=id).exists():
+            self.add_error('email', ValidationError('Email já cadastrado'))
+        return email
 
 class EducadorForm(forms.ModelForm):
     minibio = forms.CharField(

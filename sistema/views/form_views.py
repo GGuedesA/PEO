@@ -4,11 +4,13 @@ from django.urls import reverse
 from sistema.forms import *
 
 def cadastro(request):
+    if(request.user.is_authenticated):
+        return redirect('sistema:index')  # Redirecionar para a home após o login se o usuário já estiver logado
     form_action = reverse('sistema:cadastro')
     if request.method == 'POST':
         form = UsuarioForm(request.POST, files=request.FILES)
         context = {
-            'form': form,
+            'form1': form,
             'form_action': form_action,
         }
 
@@ -23,39 +25,36 @@ def cadastro(request):
         )
     
     context = {
-        'form': UsuarioForm(),
+        'form1': UsuarioForm(),
         'form_action': form_action,
     }
     return render(request, 'sistema/form_usuario.html', context)
 
+@login_required
 def editar_usuario(request, _id):
     usuario = get_object_or_404(Usuario, pk=_id, ativo=True)
     form_action = reverse('sistema:editar_usuario', args=(_id,))
 
     if request.method == 'POST':
-        form = UsuarioForm(request.POST, instance=usuario, files=request.FILES)
+        form = UsuarioUpdateForm(request.POST, instance=usuario, files=request.FILES)
         context = {
-            'form': form,
+            'form1': form,
             'form_action': form_action,
         }
 
         if(form.is_valid()):
             usuario = form.save()
             return redirect('sistema:dados_usuario', _id=usuario.pk)
-
-        return render(
-            request,
-            'sistema/form_usuario.html',
-            context
-        )
-    
-    context = {
-        'form': UsuarioForm(instance=usuario),
-        'form_action': form_action,
-    }
+    else:    
+        context = {
+            'form1': UsuarioUpdateForm(instance=usuario),
+            'form_action': form_action,
+        }
     return render(request, 'sistema/form_usuario.html', context)
 
 def criar_educador(request):
+    if(request.user.is_authenticated):
+        return redirect('sistema:index')  # Redirecionar para a home após o login se o usuário já estiver logado
     form_action = reverse('sistema:cadastro_educador')  # URL da ação do formulário
     
     if request.method == 'POST':
@@ -74,7 +73,7 @@ def criar_educador(request):
             # Aqui, garantimos que o ManyToManyField 'areas' seja salvo corretamente
             educador_form.save_m2m()  # Salva os dados do ManyToManyField (áreas)
 
-            return redirect('sistema:educador', educador.id)  # Redireciona para a página do educador
+            return redirect('sistema:dados_usuario') 
 
         # Se houver erros, renderiza o formulário com os erros
         context = {
@@ -82,7 +81,7 @@ def criar_educador(request):
             'form2': educador_form,
             'form_action': form_action,
         }
-        return render(request, 'sistema/form_educador.html', context)
+        return render(request, 'sistema/form_usuario.html', context)
 
     # Requisição GET: exibe formulário vazio
     context = {
@@ -90,8 +89,9 @@ def criar_educador(request):
         'form2': EducadorForm(),
         'form_action': form_action,
     }
-    return render(request, 'sistema/form_educador.html', context)
+    return render(request, 'sistema/form_usuario.html', context)
 
+@login_required
 def editar_educador(request, _id):
     # Obtendo o educador ou retornando 404 caso não exista
     educador = get_object_or_404(Educador, pk=_id, ativo=True)
@@ -101,7 +101,7 @@ def editar_educador(request, _id):
     
     if request.method == 'POST':
         # Instância do formulário com os dados do POST e do objeto Educador existente
-        usuario_form = UsuarioForm(request.POST, instance=educador.usuario, files=request.FILES)
+        usuario_form = UsuarioUpdateForm(request.POST, instance=educador.usuario, files=request.FILES)
         educador_form = EducadorForm(request.POST, instance=educador)
         
         context = {
@@ -126,15 +126,15 @@ def editar_educador(request, _id):
             return redirect('sistema:educador', _id=educador.pk)
 
         # Caso os formulários tenham erros, renderizamos a página com os erros
-        return render(request, 'sistema/form_educador.html', context)
+        return render(request, 'sistema/form_usuario.html', context)
 
     # Requisição GET: exibe o formulário preenchido com os dados atuais
     context = {
-        'form1': UsuarioForm(instance=educador.usuario),
+        'form1': UsuarioUpdateForm(instance=educador.usuario),
         'form2': EducadorForm(instance=educador),
         'form_action': form_action,
     }
-    return render(request, 'sistema/form_educador.html', context)
+    return render(request, 'sistema/form_usuario.html', context)
 
 @login_required
 def cadastrar_aula(request, educador_id):

@@ -54,8 +54,9 @@ def buscar(request):
 
 def educador(request, _id):
     single_educador = get_object_or_404(Educador, id=_id, ativo=True)
-    if request.user.is_authenticated and request.user.educador_set.first() == single_educador:
-        return redirect('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+    if request.user.is_authenticated and request.user.eh_educador:
+        if(request.user.educador == single_educador):
+            return redirect('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
     areas = single_educador.areas.all()
     context = {
         'educador': single_educador,
@@ -83,7 +84,9 @@ def dados_usuario(request, _id):
 def pagamentocartao(request):
     return render(request, 'sistema/pagamentocartao.html', )
 
-# Lista aqui se refere a se é pra lista como estudante ou como educador, 0 para estudante e 1 para educador
+# o nome Lista aqui se refere caso seja para listar 
+# como estudante ou como educador, 
+# 0 para estudante e 1 para educador
 @login_required
 def listar_aulas(request, lista=None):
     usuario = request.user
