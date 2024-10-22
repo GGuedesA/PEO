@@ -7,7 +7,7 @@ LOGIN:
 - aparecer botão de informações próprias - x
 
 
-adicionar SALDO na conta do usuário e uma tela de recarga
+adicionar SALDO na conta do usuário e uma tela de recarga - x
 
 
 AULAS:

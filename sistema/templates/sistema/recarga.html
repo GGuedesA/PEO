@@ -8,23 +8,24 @@
       <h4 class="titulo">Recarga</h4>
       <div class="row">
         <div class="form-check form-check-inline col-3">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
-          <label class="form-check-label" for="flexRadioDefault1">Cartão de crédito</label>
+          <input class="form-check-input" type="radio" name="cartaoCredito" id="cartaoCredito" checked/>
+          <label class="form-check-label" for="cartaoCredito">Cartão de crédito</label>
         </div>
         <div class="form-check form-check-inline col-3">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked />
-          <label class="form-check-label" for="flexRadioDefault2">Cartão de débito</label>
+          <input class="form-check-input" type="radio" name="cartaoDebito" id="cartaoDebito"/>
+          <label class="form-check-label" for="cartaoDebito">Cartão de débito</label>
         </div>
         <div class="form-check form-check-inline col-3">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked />
-          <label class="form-check-label" for="flexRadioDefault2">Pix</label>
+          <input class="form-check-input" type="radio" name="pix" id="pix" />
+          <label class="form-check-label" for="pix">Pix</label>
         </div>
 
-        <form class="align-items-center">
+        <form action="{{ form_action }}" method="POST" class="align-items-center">
+          {% csrf_token %}
           <div class="row g-3">
             <div class="col-12 col-md-6">
               <label for="inputEmail4" class="form-label">Valor da recarga</label>
-              <input type="email" class="form-control" id="inputEmail4" />
+              <input type="number" class="form-control" name="qtd_recarga" id="qtd_recarga" />
             </div>
             <div class="col-12  col-md-6">
               <label for="inputEmail4" class="form-label">Nome do cartão</label>
@@ -54,6 +55,9 @@
             </div>
           </div>
           <div class="col-12 d-flex flex-column align-items-center">
+            {% if erro %}
+              {{ erro }}
+            {% endif %}
             <button type="submit" class="btn btn-primary">Pagar</button>
           </div>
         </form>

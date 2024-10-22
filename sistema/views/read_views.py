@@ -80,10 +80,6 @@ def dados_usuario(request, _id):
     }
     return render(request, 'sistema/dados_usuario.html', context)
 
-
-def pagamentocartao(request):
-    return render(request, 'sistema/pagamentocartao.html', )
-
 # o nome Lista aqui se refere caso seja para listar 
 # como estudante ou como educador, 
 # 0 para estudante e 1 para educador
@@ -118,6 +114,22 @@ def listar_aulas(request, lista=None):
     }
     return render(request, 'sistema/listar_aulas.html', context)
 
+@login_required
+def dados_aula(request, _id):
+    aula = get_object_or_404(Aula, id=_id)
+    if aula.estudante != request.user and aula.educador.usuario != request.user:
+        return redirect('sistema:easter_egg')
+    print("Amigo estou aqui")
+    estudante = aula.estudante
+    educador = aula.educador
+    print(estudante)
+    print(educador)
+    context = {
+        'aula': aula,
+        'estudante': estudante,
+        'educador': educador, 
+    }
+    return render(request, 'sistema/dados_aula.html', context)
 
 def easter_egg(request):
     return render(request, 'sistema/easter_egg.html', )

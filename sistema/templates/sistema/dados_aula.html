@@ -1,8 +1,14 @@
 {% extends 'global/base.html' %}
 {% load static %}
 {% block content %}
-    <div class="container">
-        {{ user }}<br>
-        {{ user.eh_educador }}<br>
+  <div class="container">
+    <div class="row g-3">
+        <div class="col-12 col-md-6">
+            {% include "sistema/partials/_partial_usuario.html" with usuario=estudante %}
+        </div>
+        <div class="col-12 col-md-6 d-flex justify-content-center">
+            {% include "sistema/partials/_partial_usuario.html" with usuario=educador.usuario %}
+        </div>
     </div>
+  </div>
 {% endblock %}

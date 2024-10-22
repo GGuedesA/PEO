@@ -11,6 +11,7 @@ urlpatterns = [
 
     path('minhas_aulas/', views.listar_aulas, name='minhas_aulas'),
     path('minhas_aulas/<lista>/', views.listar_aulas, name='minhas_aulas'),
+    path('aula/<int:_id>/', views.dados_aula, name='dados_aula'), 
 
     path('really?/', views.easter_egg, name='easter_egg'),
 
@@ -26,5 +27,5 @@ urlpatterns = [
     path('usuario/<int:_id>/', views.dados_usuario, name='dados_usuario'),
     path('usuario/<int:_id>/editar/', views.editar_usuario, name='editar_usuario'),
     
-    path('pagamentocartao/', views.pagamentocartao, name='pagamentocartao'),
+    path('recarga/', views.recarga, name='recarga'),
 ]

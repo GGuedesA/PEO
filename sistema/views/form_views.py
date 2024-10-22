@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from sistema.forms import *
+from decimal import Decimal
 
 def cadastro(request):
     if(request.user.is_authenticated):
@@ -168,3 +169,23 @@ def cadastrar_aula(request, educador_id):
         'form_action': form_action,
     }
     return render(request, 'sistema/form_aula.html', context)
+
+def recarga(request):
+    form_action = reverse('sistema:recarga')
+    erro = False
+    if request.method == 'POST':
+        qtd_recarga = request.POST.get('qtd_recarga')
+        usuario = request.user
+        try:
+            qtd_recarga = Decimal(qtd_recarga)
+            usuario.saldo += qtd_recarga
+            usuario.save()
+            return redirect('sistama:dados_usuario')
+        except:
+            erro = "Entre com valores válidos"
+        
+    context = {
+        'form_action': form_action,
+        'erro': erro
+    }
+    return render(request, 'sistema/recarga.html', context)
