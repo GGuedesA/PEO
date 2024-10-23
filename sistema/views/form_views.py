@@ -180,8 +180,9 @@ def recarga(request):
             qtd_recarga = Decimal(qtd_recarga)
             usuario.saldo += qtd_recarga
             usuario.save()
-            return redirect('sistama:dados_usuario')
-        except:
+            return redirect('sistema:dados_usuario', _id=usuario.id)
+        except Exception as e:
+            print(e)
             erro = "Entre com valores válidos"
         
     context = {

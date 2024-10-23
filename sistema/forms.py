@@ -325,3 +325,40 @@ class AulaForm(forms.ModelForm):
         if commit:
             aula.save()
         return aula
+
+class ValorAulaForm(forms.ModelForm):
+    valor_aula = forms.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control'}
+        )
+    )
+
+    class Meta:
+        model = Aula
+        fields = (
+            'valor_aula',
+        )
+
+    def __init__(self, *args, **kwargs):
+        valor_inicial = kwargs.pop('valor_inicial', None)
+        super(ValorAulaForm, self).__init__(*args, **kwargs)
+        if valor_inicial is not None:
+            self.fields['valor_aula'].initial = valor_inicial
+
+    def clean_valor_aula(self):
+        valor_aula = self.cleaned_data.get('valor_aula')
+        if valor_aula < 0:
+            self.add_error(
+                'valor_aula',
+                ValidationError('O valor da aula não pode ser negativo')
+            )
+        return valor_aula
+    
+    def save(self, commit=True):
+        aula = super().save(commit=False)
+        aula.situacao += 1
+        if commit:
+            aula.save()
+        return aula

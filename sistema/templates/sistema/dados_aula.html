@@ -1,14 +1,67 @@
 {% extends 'global/base.html' %}
 {% load static %}
+{% load filters %}
 {% block content %}
+  {% block includes %}
+    <link rel="stylesheet" href="{% static 'global/css/styles-aulas.css' %}" />
+  {% endblock %}
   <div class="container">
     <div class="row g-3">
-        <div class="col-12 col-md-6">
-            {% include "sistema/partials/_partial_usuario.html" with usuario=estudante %}
+      <div class="col-12 col-lg-6">
+        <h4>Estudante:</h4>
+        {% include 'sistema/partials/_partial_usuario.html' with usuario=estudante %}
+      </div>
+      <div class="col-12 col-lg-6">
+        <h4>Educador:</h4>
+        {% include 'sistema/partials/_partial_usuario.html' with usuario=educador.usuario %}
+      </div>
+      <div class="col-12">
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-12">
+              <div class="card-body row">
+                <div class="col-12 col-lg-6">
+                  <h4 class="card-title">Situação da aula: <span class="badge {{ situacoes_styles|get_item:aula.situacao }}">{{ situacoes|get_item:aula.situacao }}</span></h4>
+                </div>
+                <div class="col-12 col-lg-6 d-flex justify-content-center justify-content-lg-end">
+                  {% include 'sistema/partials/_partial_acoes_aula.html' with situacao=aula.situacao %}
+                </div>
+                <p class="infos-aula">
+                  Data da aula: <span class="dados-usuario">{{ aula.data_aula }}</span>
+                </p>
+                <p class="infos-aula">
+                  Horário de começo: <span class="dados-usuario">{{ aula.horario_inicio }}</span>
+                </p>
+                <p class="infos-aula">
+                  Horário de término: <span class="dados-usuario">{{ aula.horario_fim }}</span>
+                </p>
+                <p class="infos-aula">
+                  Tempo total da aula: <span class="dados-usuario">{{ aula.tempo_aula }} minutos</span>
+                </p>
+                <p class="infos-aula">
+                  Valor: <span class="dados-usuario">
+                    {% if aula.situacao == 0 %}
+                      Ainda não definido
+                    {% else %}
+                      {{ aula.valor_aula }}
+                    {% endif %}
+                  </span>
+                </p>
+                <p class="infos-aula">
+                  Pagamento realizado:
+                  <span class="dados-usuario">
+                    {% if aula.pago %}
+                      Sim
+                    {% else %}
+                      Não
+                    {% endif %}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col-12 col-md-6 d-flex justify-content-center">
-            {% include "sistema/partials/_partial_usuario.html" with usuario=educador.usuario %}
-        </div>
+      </div>
     </div>
   </div>
 {% endblock %}

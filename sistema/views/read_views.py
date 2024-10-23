@@ -80,56 +80,5 @@ def dados_usuario(request, _id):
     }
     return render(request, 'sistema/dados_usuario.html', context)
 
-# o nome Lista aqui se refere caso seja para listar 
-# como estudante ou como educador, 
-# 0 para estudante e 1 para educador
-@login_required
-def listar_aulas(request, lista=None):
-    usuario = request.user
-
-    if(usuario.eh_educador): 
-        lista = '1' if lista != '0' else '0'
-    else:
-        if(lista != None):
-            return redirect('sistema:easter_egg')
-        lista = '0'
-
-    if lista == '0':
-        aulas = Aula.objects.filter(estudante=usuario)
-    else:
-        aulas = Aula.objects.filter(educador__usuario=usuario)
-
-    situacoes_styles = get_situacoes_styles()
-    situacoes = get_situacoes_choices()
-    aulas_por_situacao = {chave: [] for chave in situacoes.keys()}
-
-    for aula in aulas:
-        aulas_por_situacao[aula.situacao].append(aula)
-
-    context = {
-        'aulas_por_situacao': aulas_por_situacao,
-        'situacoes': situacoes,
-        'situacoes_styles': situacoes_styles,
-        'lista': lista,
-    }
-    return render(request, 'sistema/listar_aulas.html', context)
-
-@login_required
-def dados_aula(request, _id):
-    aula = get_object_or_404(Aula, id=_id)
-    if aula.estudante != request.user and aula.educador.usuario != request.user:
-        return redirect('sistema:easter_egg')
-    print("Amigo estou aqui")
-    estudante = aula.estudante
-    educador = aula.educador
-    print(estudante)
-    print(educador)
-    context = {
-        'aula': aula,
-        'estudante': estudante,
-        'educador': educador, 
-    }
-    return render(request, 'sistema/dados_aula.html', context)
-
 def easter_egg(request):
     return render(request, 'sistema/easter_egg.html', )

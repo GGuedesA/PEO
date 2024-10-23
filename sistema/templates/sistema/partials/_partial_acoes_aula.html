@@ -1,0 +1,142 @@
+{% load static %}
+{% comment %}
+    Esse partial é dedicado a controlar as possíveis opções de botão 
+    a aparecer na tela de dados da aula, por isso ele tem vários ifs
+    Significado das situações (atualizado dia 22/10/2024)
+    0 = Aguardando professor definir valor
+    1 = professor definiu valor, esperando aluno aceitar valor
+    2 = aluno aceitou valor, aguardando pagamento
+    3 = aluno pagou, esperando o horário da aula.
+    4 = aula acontecendo
+    5 = aula finalizada, tudo normalmente nos conformes.
+    6 = Educador negou o dia (ainda na etapa 0)
+    7 = Estudante negou o valor (ainda na etapa 1)
+    8 = Educador cancelou a aula.
+    9 = Estudante cancelou a aula.
+{% endcomment %}
+{% if situacao == 0 %}
+    <div class="aguardando">
+    {% if aula.educador.usuario == user %}
+        <span>
+            <a href="{% url 'sistema:definir_valor' _id=aula.id %}">
+                <button class="btn categoria-confirmar-educador" type="button">Definir valor da aula</button>
+            </a>
+        </span>
+        <span>
+            <a href="{% url 'sistema:mudar_situacao' _id=aula.id situacao=6 %}">
+                <button class="btn categoria-negado-educador" type="button">Negar dia</button>
+            </a>
+        </span>
+    {% else %}
+        <div class="desativado d-inline-flex px-2">
+            <button class="btn categoria-agendado" type="button" disabled>Aguarde o educador definir um valor</button>
+        </div>
+        <span>
+            <a href="{% url 'sistema:mudar_situacao' _id=aula.id situacao=9 %}">
+                <button class="btn categoria-cancelado" type="button">Cancelar</button>
+            </a>
+        </span>
+    {% endif %}
+    </div>
+{% elif situacao == 1 %}
+    <div class="confirmado-educador">
+    {% if aula.educador.usuario == user %}
+        <span class="desativado d-inline-flex px-2">
+            <button class="btn categoria-agendado" type="button" disabled>Aguardando confirmação do estudante</button>
+        </span>
+        <span class="no-link px-1">
+            <a href="{% url 'sistema:mudar_situacao' _id=aula.id situacao=8 %}">
+                <button class="btn categoria-cancelado" type="button">Cancelar</button>
+            </a>
+        </span>
+    {% else %}
+    <span>
+        <a href="{% url 'sistema:mudar_situacao' _id=aula.id situacao=2 %}">
+            <button class="btn categoria-agendado" type="button">Aceitar valor</button>
+        </a>
+    </span>
+        <span>
+            <a href="{% url 'sistema:mudar_situacao' _id=aula.id situacao=7 %}">
+                <button class="btn categoria-negado-estudante" type="button">Negar valor</button>
+            </a>
+        </span>
+    {% endif %}
+    </div>
+{% elif situacao == 2 %}
+    <div class="pagar d-inline-flex">
+    {% if aula.educador.usuario == user %}
+        <div class="desativado d-inline-flex px-2">
+            <button class="btn categoria-agendado" type="button" disabled>Aguardando pagamento do estudante</button>
+        </div>
+        <span>
+            <a href="{% url 'sistema:mudar_situacao' _id=aula.id situacao=8 %}">
+                <button class="btn categoria-cancelado" type="button">Cancelar</button>
+            </a>
+        </span>
+    {% else %}
+        <span class="no-link px-1">
+            <a href="{% url 'sistema:pagar_aula' _id=aula.id%}">
+                <button class="btn categoria-pagar" type="button">Realizar pagamento</button>
+            </a>
+        </span>
+        <span class="no-link px-1">
+            <a href="{% url 'sistema:mudar_situacao' _id=aula.id situacao=9 %}">
+                <button class="btn categoria-cancelado" type="button">Cancelar</button>
+            </a>
+        </span>
+    {% endif %}
+    </div>
+{% elif situacao == 3 %}
+    <div class="agendado">
+    {% if aula.educador.usuario == user %}
+        {% comment %}
+            aqui viria um outro if para verificar se já está no horário para começar a aula 
+        {% endcomment %}
+        <span>
+            <button class="btn categoria-agendado" type="button">Iniciar aula</button>
+        </span>
+        <span>
+            <a href="{% url 'sistema:mudar_situacao' _id=aula.id situacao=8 %}">
+                <button class="btn categoria-cancelado" type="button">Cancelar</button>
+            </a>
+        </span>
+    {% else %}
+        <div class="desativado d-inline-flex px-2">
+            <button class="btn desativado categoria-agendado" type="button" disabled>Aguardando início da aula</button>
+        </div>
+        <span>
+            <a href="{% url 'sistema:mudar_situacao' _id=aula.id situacao=9 %}">
+                <button class="btn categoria-cancelado" type="button">Cancelar</button>
+            </a>
+        </span>
+    {% endif %}
+    </div>
+{% elif situacao == 4 %}
+    <div class="iniciado">
+    {% if aula.educador.usuario == user %}
+        <button class="btn categoria-finalizado" type="button">Finalizar aula</button>
+    {% else %}
+        <button class="btn categoria-iniciado" type="button">Entrar na aula</button>
+    {% endif %}
+    </div>
+{% elif situacao == 5 %}
+    <div class="finalizado desativado">
+        <button class="btn desativado categoria-finalizado" type="button" disabled>Aula já finalizada</button>
+    </div>
+{% elif situacao == 6 %}
+    <div class="negado-educador desativado">
+        <button class="btn desativado categoria-negado-educador" type="button" disabled>Dia negado pelo educador</button>
+    </div>
+{% elif situacao == 7 %}
+    <div class="negado-estudante desativado">
+        <button class="btn desativado categoria-negado-estudante" type="button" disabled>Valor negado pelo estudante</button>
+    </div>
+{% elif situacao == 8 %}
+    <div class="cancelado-estudante desativado">
+        <button class="btn categoria-cancelado" type="button" disabled>Aula cancelada pelo educador</button>
+    </div>
+{% elif situacao == 9 %}
+    <div class="cancelado-estudante desativado">
+        <button class="btn categoria-cancelado" type="button" disabled>Aula cancelada pelo estudante</button>
+    </div>
+{% endif %}

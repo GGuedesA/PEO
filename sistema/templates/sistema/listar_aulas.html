@@ -29,7 +29,7 @@
           {% if aulas %}
             <ul class="lista-aulas">
               {% for aula in aulas %}
-              <a href="{% url "sistema:dados_aula" aula.id %}">
+              <a class="nav-link" href="{% url "sistema:dados_aula" aula.id %}">
                 <li class="aula-item">
                   {% if lista == '0' %}
                     Aula com {{ aula.educador.usuario.nome }} no dia {{ aula.data_aula }} das {{ aula.horario_inicio }} até {{ aula.horario_fim }} <span class="badge {{ situacoes_styles|get_item:aula.situacao }}">{{ situacoes|get_item:aula.situacao }}</span>

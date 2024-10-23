@@ -80,14 +80,17 @@ def get_situacoes():
     # Essa função define as situações das aulas, na esquerda a forma "human readable" do choices e na direita ficam 
     # as tags css que serão renderizadas, estilize elas através do arquivo styles-aulas.css dentro do static global
     return {
-        'Aguardando confirmação'   : 'categoria-confirmar',
-        'Confirmado pelo professor': 'categoria-confirmado',
+        'Aguardando confirmação'   : 'categoria-confirmar-educador', 
+        'Confirmado pelo educador' : 'categoria-confirmar-estudante',
         'Aguardando pagamento'     : 'categoria-pagar',
         'Agendado'                 : 'categoria-agendado',
+        'Iniciado'                 : 'categoria-iniciado',
         'Finalizado'               : 'categoria-finalizado',
-        'Negado'                   : 'categoria-negado',
-        'Cancelado'                : 'categoria-cancelado',
-    }
+        'Negado pelo educador'     : 'categoria-negado-educador',
+        'Negado pelo estudante'    : 'categoria-negado-estudante',
+        'Cancelado pelo educador'  : 'categoria-cancelado',
+        'Cancelado pelo estudante' : 'categoria-cancelado',
+    } 
 
 def get_situacoes_choices():
     # essa função pega a de cima e gera um dicionário como o indice como chave e o human readable como valor

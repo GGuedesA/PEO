@@ -124,6 +124,7 @@ body {
 
 .card {
   box-shadow: 5px 2px 5px rgba(0, 0, 0, 10%);
+  min-height: 230px;
 }
 
 .card-list {
@@ -240,7 +241,7 @@ body {
   padding-left: 0;
   font-size: medium;
 }
-.infos-usuario {
+.infos-usuario, .infos-aula {
   font-size: large;
   font-weight: 500;
 }

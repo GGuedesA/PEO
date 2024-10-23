@@ -1,0 +1,52 @@
+{% extends 'global/base.html' %}
+{% load static %}
+{% block content %}
+  <link rel="stylesheet" href="{% static 'global/css/pagamento.css' %}" />
+
+  <div class="container-fluid d-flex flex-column align-items-center">
+    <div class="form-usuario">
+      <h4 class="titulo">Definir valor da aula</h4>
+      <div class="row">
+        <form action="{{ form_action }}" method="POST" class="align-items-center">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-12 col-lg-4">
+              <label for="data_aula" class="form-label">Data da aula:</label>
+              <input type="text" class="form-control" name="data_aula" id="data_aula" value="{{ aula.data_aula }}" disabled/>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <label for="horario_inicio" class="form-label">Horário de início:</label>
+              <input type="text" class="form-control" name="horario_inicio" id="horario_inicio" value="{{ aula.horario_inicio }}" disabled/>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <label for="horario_fim" class="form-label">Horário de término:</label>
+              <input type="text" class="form-control" name="horario_fim" id="horario_fim" value="{{ aula.horario_fim }}" disabled/>
+            </div>
+            <div class="col-12 col-md-6 offset-md-3">
+                {% for field in form %}
+                  <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                  {{ field }}
+                  {% if field.help_text %}
+                    <p class="help-text">{{ field.help_text }}</p>
+                  {% endif %}
+                  {{ field.errors }}
+              {% endfor %}
+            </div>  
+          </div>
+          <div class="col-12">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="gridCheck" required/>
+              <label class="form-check-label" for="gridCheck">Declaro estar ciente e de acordo com o pagamento</label>
+            </div>
+          </div>
+          <div class="col-12 d-flex flex-column align-items-center">
+            {% if erro %}
+              {{ erro }}
+            {% endif %}
+            <button type="submit" class="btn btn-primary">Pagar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

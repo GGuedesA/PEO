@@ -28,11 +28,18 @@
     background-color: rgb(89, 75, 75);
 }
 
-.categoria-confirmar{
+.btn {
+    color: #ffffff;
+    font-weight: 700;
+    position: relative;
+    z-index: 2;
+}
+
+.categoria-confirmar-educador{
     background-color: #ffc107 !important;    
 }
 
-.categoria-confirmado{
+.categoria-confirmar-estudante{
     background-color: #198754 !important;    
 }
 
@@ -40,7 +47,7 @@
     background-color: #0dcaf0 !important;    
 }
 
-.categoria-agendado{
+.categoria-agendado, .categoria-iniciado{
     background-color: #0d6efd !important;    
 }
 
@@ -48,12 +55,29 @@
     background-color: #6c757d !important;    
 }
 
-.categoria-negado{
-    background-color: #dc3545 !important;    
+.categoria-negado-educador{
+    background-color: #f8152c !important;    
+}
+.categoria-negado-estudante{
+    background-color: #ca3746 !important;    
 }
 
 .categoria-cancelado{
     background-color: #212529 !important;    
+}
+
+.desativado {
+    cursor: not-allowed;
+}
+
+.btn:disabled {
+    opacity: .5; /* Aumenta a opacidade */
+    color: #ffffff; /* Cor do texto */
+    cursor: not-allowed; /* Muda o cursor para indicar que está desabilitado */
+}
+
+.no-link {
+    text-decoration: none !important;
 }
 
 .aula-item {
@@ -69,4 +93,12 @@
 .aula-item:hover {
     filter: brightness(90%);
     transform: scale(1.03);
+}
+
+.form-pagar {
+    background-color: rgb(140, 87, 239);
+    padding: 2rem;
+    border: 1px solid black;
+    box-shadow: 0 5px 10px 2px var(--clr-dark-shadow-20);
+    border-radius: 1rem;
 }
