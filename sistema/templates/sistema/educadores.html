@@ -1,0 +1,39 @@
+{% extends 'global/base.html' %}
+{% load static %}
+
+{% block includes %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid d-flex flex-column align-items-center">
+    <form action="{% url 'sistema:buscar' %}" method="GET" class="container-fluid d-flex justify-content-center">
+    <div class="input-group search-bar">
+        <input class="form-control border-end-0 border" type="search" placeholder="Buscar" id="search-input" name="q" value="{{ valor_buscado }}"/>
+        <span class="input-group-append"><button class="btn btn-outline-secondary bg-white" type="button"><i class="fa fa-search"></i></button></span>
+      </form>
+    </div>
+    <div class="content-educadores">
+      {% for educador in page_obj %}
+        <div class="card card-list">
+          <a href="{% url 'sistema:educador' educador.id %}" class="card-redirect">
+            {% if educador.usuario.imagem != '' %}
+              <img src="/media/{{ educador.usuario.imagem }}" class="card-img-top educator-img" alt="..." />
+            {% else %}
+              <img src="{% static 'global/imgs/profile-pic.svg' %}" class="card-img-top no-img" alt="..." />
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ educador.usuario.nome }}</h5>
+              <div class="card-subtitle mb-2 text-muted">
+                {% for area in educador.areas.all %}
+                  <span class="custom-chip">{{area.nome}}</span>
+                {% endfor %}
+              </div>
+              <p class="card-text">{{ educador.minibio }}</p>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'global/base.html' %}
+{% load static %}
+{% block content %}
+  <link rel="stylesheet" href="{% static 'global/css/pagamento.css' %}" />
+
+  <div class="container-fluid d-flex flex-column align-items-center">
+    <div class="form-usuario">
+      <h4 class="titulo">Recarga</h4>
+      <div class="row">
+        <div class="form-check form-check-inline col-3">
+          <input class="form-check-input" type="radio" name="cartaoCredito" id="cartaoCredito" checked/>
+          <label class="form-check-label" for="cartaoCredito">Cartão de crédito</label>
+        </div>
+        <div class="form-check form-check-inline col-3">
+          <input class="form-check-input" type="radio" name="cartaoDebito" id="cartaoDebito"/>
+          <label class="form-check-label" for="cartaoDebito">Cartão de débito</label>
+        </div>
+        <div class="form-check form-check-inline col-3">
+          <input class="form-check-input" type="radio" name="pix" id="pix" />
+          <label class="form-check-label" for="pix">Pix</label>
+        </div>
+
+        <form action="{{ form_action }}" method="POST" class="align-items-center">
+          {% csrf_token %}
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <label for="inputEmail4" class="form-label">Valor da recarga</label>
+              <input type="number" class="form-control" name="qtd_recarga" id="qtd_recarga" />
+            </div>
+            <div class="col-12  col-md-6">
+              <label for="inputEmail4" class="form-label">Nome do cartão</label>
+              <input type="text" class="form-control" id="inputEmail4" />
+            </div>
+            <div class="col-12 col-md-6">
+              <label for="inputAddress" class="form-label">Número do cartão</label>
+              <input type="text" class="form-control" id="inputAddress" placeholder="" />
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="row">
+                <div class="col-md-6">
+                  <label for="inputZip" class="form-label">Expiração</label>
+                  <input type="text" class="form-control" id="inputZip" />
+                </div>
+                <div class="col-md-6">
+                  <label for="inputZip" class="form-label">CVV</label>
+                  <input type="text" class="form-control" id="inputZip" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="gridCheck" />
+              <label class="form-check-label" for="gridCheck">Declaro estar ciente e de acordo com a compra</label>
+            </div>
+          </div>
+          <div class="col-12 d-flex flex-column align-items-center">
+            {% if erro %}
+              {{ erro }}
+            {% endif %}
+            <button type="submit" class="btn btn-primary">Pagar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

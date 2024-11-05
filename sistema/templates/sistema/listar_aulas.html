@@ -1,0 +1,50 @@
+{% extends 'global/base.html' %}
+{% load static %}
+{% load filters %}
+{% block includes %}
+  <link rel="stylesheet" href="{% static 'global/css/styles-aulas.css' %}" />
+{% endblock %}
+{% block content %}
+  <div class="container container-aulas">
+    {% if user.eh_educador %}
+      <div class="div-btns">
+        <a href="{% url 'sistema:minhas_aulas' 0 %}"><button class="btn btn-primary" type="button">Estudante</button></a>
+        <a href="{% url 'sistema:minhas_aulas' 1 %}"><button class="btn btn-success" type="button">Educador</button></a>
+      </div>
+    {% endif %}
+    {% if lista == '0' %}
+      <h2>Minhas Aulas: Estudante</h2>
+    {% else %}
+      <h2>Minhas Aulas: Educador</h2>
+    {% endif %}
+    <div class="aulas-por-situacao">
+      {% for situacao, aulas in aulas_por_situacao.items %}
+        <div class="sessao-situacao">
+          {% for indice, human_readable in situacoes.items %}
+            {% if indice == situacao %}
+              <h4 class="{{ situacoes_styles|get_item:indice }} situacao-title ">{{ human_readable }}</h4>
+            {% endif %}
+          {% endfor %}
+
+          {% if aulas %}
+            <ul class="lista-aulas">
+              {% for aula in aulas %}
+              <a class="nav-link" href="{% url "sistema:dados_aula" aula.id %}">
+                <li class="aula-item">
+                  {% if lista == '0' %}
+                    Aula com {{ aula.educador.usuario.nome }} no dia {{ aula.data_aula }} das {{ aula.horario_inicio }} até {{ aula.horario_fim }} <span class="badge {{ situacoes_styles|get_item:aula.situacao }}">{{ situacoes|get_item:aula.situacao }}</span>
+                  {% else %}
+                    Aula com {{ aula.estudante.nome }} no dia {{ aula.data_aula }} das {{ aula.horario_inicio }} até {{ aula.horario_fim }} <span class="badge {{ situacoes_styles|get_item:aula.situacao }}">{{ situacoes|get_item:aula.situacao }}</span>
+                  {% endif %}
+                </li>
+              </a>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p>Sem aulas nesta categoria.</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

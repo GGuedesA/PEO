@@ -1,0 +1,113 @@
+.container-aulas {
+    background-color: aliceblue;
+    padding: 2rem;
+    border: 1px solid black;
+    box-shadow: 0 5px 10px 2px var(--clr-dark-shadow-20);
+    border-radius: 1rem;
+}
+
+.sessao-situacao {
+    border-top: 1.25px solid black;
+    padding-top: 0.5rem;
+}
+
+.situacao-title {
+    --bs-padding-x: 0.65em;
+    --bs-padding-y: 0.35em;
+    --bs-font-weight: 700;
+    --bs-color: #fff;
+    --bs-border-radius: 0.375rem;
+    display: inline-block;
+    padding: var(--bs-padding-y) var(--bs-padding-x);
+    font-weight: 700;
+    color: white;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: var(--bs-border-radius);
+    background-color: rgb(89, 75, 75);
+}
+
+.btn {
+    color: #ffffff;
+    font-weight: 700;
+    position: relative;
+    z-index: 2;
+}
+
+.categoria-confirmar-educador{
+    background-color: #ffc107 !important;    
+}
+
+.categoria-confirmar-estudante{
+    background-color: #198754 !important;    
+}
+
+.categoria-pagar{
+    background-color: #0dcaf0 !important;    
+}
+
+.categoria-agendado, .categoria-iniciado{
+    background-color: #0d6efd !important;    
+}
+
+.categoria-finalizado{
+    background-color: #6c757d !important;    
+}
+
+.categoria-negado-educador{
+    background-color: #f8152c !important;    
+}
+.categoria-negado-estudante{
+    background-color: #ca3746 !important;    
+}
+
+.categoria-cancelado{
+    background-color: #212529 !important;    
+}
+
+.desativado {
+    cursor: not-allowed;
+}
+
+.btn:disabled {
+    opacity: .5; /* Aumenta a opacidade */
+    color: #ffffff; /* Cor do texto */
+    cursor: not-allowed; /* Muda o cursor para indicar que está desabilitado */
+}
+
+.no-link {
+    text-decoration: none !important;
+}
+
+.aula-item {
+    font-size: 1.25em;
+    padding: 0.35em;
+    text-decoration: none;
+    list-style: none;
+    transition: all .2s ease-in-out;
+    height: fit-content;
+    cursor: pointer;
+}
+
+.aula-item:hover {
+    filter: brightness(90%);
+    transform: scale(1.03);
+}
+
+.form-pagar {
+    background-color: #4500c6;
+    color: white;
+    padding: 2rem;
+    border: 1px solid black;
+    box-shadow: 0 5px 10px 2px var(--clr-dark-shadow-20);
+    border-radius: 1rem;
+}
+
+.checkbox-pagar-aula{
+    float: none !important;
+}
+
+.remove-text-decoration *{
+    text-decoration: none;
+}

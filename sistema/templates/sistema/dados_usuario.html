@@ -1,0 +1,19 @@
+{% extends 'global/base.html' %}
+{% load static %}
+{% block content %}
+  <div class="container-fluid d-flex flex-column align-items-center">
+    <div class="content-usuario d-flex flex-column flex-lg-row justify-content-center between">
+      {% include "sistema/partials/_partial_usuario.html" with usuario=usuario educador=educador exibir_dados_pessoais="True"%}
+      {% if usuario.eh_educador %}
+        <div class="dados-aula d-flex flex-column align-items-center">
+          <span class="d-flex flex-column align-items-center">
+              <h2>Valor Aula</h2>
+              <h5>R$ {{ educador.valor_aula }}</h5>
+              <h2>Tempo Aula</h2>
+              <h5>{{ educador.tempo_aula }} minutos</h5>
+          </span>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

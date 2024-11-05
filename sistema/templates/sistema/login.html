@@ -1,0 +1,33 @@
+{% extends 'global/base.html' %}
+
+{% block content %}
+  <div class="container d-md-flex flex-column align-items-center">
+    <div class="d-md-flex w-100 justify-content-center m-4 btns-forms">
+      <form method="POST" class="form-login d-flex flex-md-wrap">
+        <h2 class="w-100">Login</h2>
+        {% csrf_token %}
+        {% for field in form %}
+          <div class="form-group form-two-inputs flex-md-wrap">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+              <p class="help-text">{{ field.help_text }}</p>
+            {% endif %}
+            {{ field.errors }}
+          </div>
+        {% endfor %}
+        {% if form.non_field_errors %}
+          <div class="form-content">
+            <div class="form-group">
+              <div class="message error">{{ form.non_field_errors }}</div>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="form-group btn-container">
+          <button class="btn btn-primary btn-submit" type="submit">Enviar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

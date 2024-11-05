@@ -1,0 +1,53 @@
+{% extends 'global/base.html' %}
+{% load static %}
+{% block content %}
+  <div class="container-fluid d-flex flex-column align-items-center">
+    <div class="content-single-educador row">
+      <div class="col-12 d-flex justify-content-between dados-single-educador">
+        <div class="card mb-3 col-lg-8">
+          <div class="row g-0">
+            <div class="col-md-4">
+              {% if educador.usuario.imagem != '' %}
+                <img src="/media/{{ educador.usuario.imagem }}" class="card-img-top educator-img" alt="..." />
+              {% else %}
+                <img src="{% static 'global/imgs/profile-pic.svg' %}" class="card-img-top no-img" alt="..." />
+              {% endif %}
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <h4 class="card-title">{{ educador.usuario.nome }}</h4>
+                  {% if educador.usuario.id == user.id and user.is_authenticated %}
+                    <a href="{% url 'sistema:editar_educador' educador.id %}"><button class="btn btn-primary" type="button">Editar</button></a>
+                    <a href="{% url 'sistema:dados_usuario' educador.usuario.id %}"><button class="btn btn-primary" type="button">Informações do usuário</button></a>
+                  {% endif %}
+                </div>
+                {% for area in areas %}
+                  <span class="badge bg-primary">{{ area.nome }}</span>
+                {% endfor %}
+                <p class="card-text">{{ educador.minibio }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="dados-aula d-flex flex-column align-items-center col-lg-4">
+          <span class="d-flex flex-column align-items-center">
+            <h2>Valor Aula</h2>
+            <h5>R$ {{ educador.valor_aula }}</h5>
+            <h2>Tempo Aula</h2>
+            <h5>{{ educador.tempo_aula }} minutos</h5>
+            {% if user.is_authenticated %}
+              <a href="{% url 'sistema:cadastrar_aula' educador_id=educador.id %}"><button type="button" class="btn btn-primary">Contratar</button></a>
+            {% else %}
+              <a href="{% url 'sistema:login' %}"><button type="button" class="btn btn-primary">Faça login para contratar</button></a>
+            {% endif %}
+          </span>
+        </div>
+      </div>
+      <div class="descricao-educador w-100 col-12">
+        <h2>Descrição do Educador</h2>
+        <p>{{ educador.descricao }}</p>
+      </div>
+    </div>
+  </div>
+{% endblock %}
