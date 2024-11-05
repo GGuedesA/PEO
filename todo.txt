@@ -23,7 +23,7 @@ AULAS:
   - Aula após tela de pagamento fica como "agendada" - x
   - tanto o professor quanto o aluno podem cancelar a aula a qualquer momento com até 3 horas de antecedência (o estorno sempre irá para a conta do aluno dentro do site)
   - dado o horário, o educador clica no botão de iniciar a aula (o botão ficaria disponível em 15 minutos antes da aula começar)
-  - dado o término da aula, o educador clica para marcar como concluída
+  - dado o término da aula, o educador clica para marcar como concluída - X
   - próxima vez que abrir a tela de "minhas aulas" tanto o educador como o estudante, percorrer a lista de aulas conferindo o horário e alterando para cancelada caso 
 
 
@@ -44,17 +44,17 @@ nivel 2:
 - pagar (aluno) - X
 
 nivel 3:
-- iniciar aula
+- iniciar aula - X
 - cancelar (educador) - X
 - cancelar (aluno) - X
 
 nivel 4:
-- finalizar aula (educador)
+- finalizar aula (educador) - X
   	[a aula deve ser automaticamente finalizada na próxima vez que um dos envolvidos abrir a listagem de aulas ou o id da aula e o horário atual for maior que o horário de término da aula]
-- entrar na aula (estudante)
+- entrar na aula (estudante) - X
 
 nivel 5-9:
-- esses níveis não devem fazer nada
+- esses níveis não devem fazer nada - X
 
 
 ***observações:
@@ -71,7 +71,7 @@ nivel 5-9:
 
     
 APÓS ISSO (se sobrar tempo):
- - reunião (vulgo começar aula)
+ - reunião (vulgo começar aula) - X
  - api de pagamentos
  - colocar um histórico das transações, recargas, aulas, etc
  - ao trocar de tela na tela de cadastro, levar os dados em comum junto
