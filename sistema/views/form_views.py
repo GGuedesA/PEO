@@ -34,7 +34,7 @@ def cadastro(request):
 @login_required
 def editar_usuario(request, _id):
     usuario = get_object_or_404(Usuario, pk=_id, ativo=True)
-    form_action = reverse('sistema:editar_usuario', args=(_id,))
+    form_action = reverse('sistema:editar_usuario', args=(_id,)) 
 
     if request.method == 'POST':
         form = UsuarioUpdateForm(request.POST, instance=usuario, files=request.FILES)

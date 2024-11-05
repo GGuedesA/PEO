@@ -96,9 +96,18 @@
 }
 
 .form-pagar {
-    background-color: rgb(140, 87, 239);
+    background-color: #4500c6;
+    color: white;
     padding: 2rem;
     border: 1px solid black;
     box-shadow: 0 5px 10px 2px var(--clr-dark-shadow-20);
     border-radius: 1rem;
+}
+
+.checkbox-pagar-aula{
+    float: none !important;
+}
+
+.remove-text-decoration *{
+    text-decoration: none;
 }

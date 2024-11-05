@@ -14,6 +14,7 @@
     8 = Educador cancelou a aula.
     9 = Estudante cancelou a aula.
 {% endcomment %}
+<span class="remove-text-decoration">
 {% if situacao == 0 %}
     <div class="aguardando">
     {% if aula.educador.usuario == user %}
@@ -89,11 +90,10 @@
 {% elif situacao == 3 %}
     <div class="agendado">
     {% if aula.educador.usuario == user %}
-        {% comment %}
-            aqui viria um outro if para verificar se já está no horário para começar a aula 
-        {% endcomment %}
         <span>
-            <button class="btn categoria-agendado" type="button">Iniciar aula</button>
+            <a href="{% url 'sistema:iniciar_aula_jitsi' _id=aula.id %}">
+                <button class="btn categoria-agendado" type="button">Iniciar aula</button>
+            </a>
         </span>
         <span>
             <a href="{% url 'sistema:mudar_situacao' _id=aula.id situacao=8 %}">
@@ -111,14 +111,23 @@
         </span>
     {% endif %}
     </div>
-{% elif situacao == 4 %}
+
+{% elif aula.situacao == 4 %}
     <div class="iniciado">
-    {% if aula.educador.usuario == user %}
-        <button class="btn categoria-finalizado" type="button">Finalizar aula</button>
-    {% else %}
-        <button class="btn categoria-iniciado" type="button">Entrar na aula</button>
-    {% endif %}
+        {% if aula.educador.usuario == user %}
+            <a href="{{ aula.sala_url }}" target="_blank">
+                <button class="btn categoria-iniciado" type="button">Entrar na aula</button>
+            </a>
+            <a href="{% url 'sistema:mudar_situacao' _id=aula.id situacao=5 %}">
+                <button class="btn categoria-finalizado" type="button">Finalizar aula</button>
+            </a>
+        {% else %}
+            <a href="{{ aula.sala_url }}" target="_blank">
+                <button class="btn categoria-iniciado" type="button">Entrar na aula</button>
+            </a>
+        {% endif %}
     </div>
+
 {% elif situacao == 5 %}
     <div class="finalizado desativado">
         <button class="btn desativado categoria-finalizado" type="button" disabled>Aula já finalizada</button>
@@ -140,3 +149,4 @@
         <button class="btn categoria-cancelado" type="button" disabled>Aula cancelada pelo estudante</button>
     </div>
 {% endif %}
+</span>

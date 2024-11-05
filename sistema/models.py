@@ -101,6 +101,7 @@ def get_situacoes_styles():
     return {i: valor for i, valor in enumerate(get_situacoes().values())}
     
 class Aula(models.Model):
+    sala_url = models.URLField(max_length=255, blank=True, null=True)
     estudante = models.ForeignKey(Usuario, on_delete=models.RESTRICT, related_name="aulas")
     educador = models.ForeignKey(Educador, on_delete=models.RESTRICT, related_name="aulas")
     valor_aula = models.DecimalField(max_digits=6, decimal_places=2)

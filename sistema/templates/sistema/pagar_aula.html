@@ -23,20 +23,20 @@
                                 <div class="col-12">
                                     {% if pode_pagar %}
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="gridCheck" required/>
+                                            <input class="form-check-input checkbox-pagar-aula" type="checkbox" id="gridCheck" required/>
                                             <label class="form-check-label" for="gridCheck">Declaro estar ciente e de acordo com a compra</label>
                                         </div>
                                         {% if erro %}
                                             {{ erro }}
                                         {% endif %}
                                     {% endif %}
-                                    <div class="d-flex align-items-center flex-column gap-1">
-                                        {% if pode_pagar %}
-                                            <button type="submit" class="btn btn-primary w-25">Pagar</button>
-                                        {% endif %}
-                                        <a class="w-100" href="{% url "sistema:recarga" %}">
-                                            <button type="button" class="btn btn-primary w-25">Fazer recarga</button>
+                                    <div class="d-flex align-items-center gap-1">
+                                        <a class="w-100 md:w-25" href="{% url "sistema:recarga" %}">
+                                            <button type="button" class="btn btn-success w-100">Fazer recarga</button>
                                         </a>
+                                        {% if pode_pagar %}
+                                            <button type="submit" class="btn btn-primary w-100 md:w-25">Pagar</button>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

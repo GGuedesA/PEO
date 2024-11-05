@@ -1,4 +1,4 @@
-from decimal import Decimal
+import uuid
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -101,7 +101,10 @@ def realizar_pagamento(request, _id):
         aula.pago = True
         aula.situacao += 1
         usuario.saldo -= aula.valor_aula
+        educador = aula.educador
+        educador.usuario.saldo += aula.valor_aula
         usuario.save()
+        educador.usuario.save()
         aula.save()
         return redirect('sistema:dados_aula', _id=aula.pk)
     
@@ -110,3 +113,28 @@ def realizar_pagamento(request, _id):
         'pode_pagar': pode_pagar,
     }
     return render(request, 'sistema/pagar_aula.html', context)
+
+
+@login_required
+def iniciar_aula_jitsi(request, _id):
+    aula = get_object_or_404(Aula, id=_id)
+    if aula.estudante != request.user and aula.educador.usuario != request.user:
+        return redirect('sistema:easter_egg')
+    
+    # Gera o nome da sala baseado no ID da aula ou outro identificador único
+    nome_sala = f"aula-{aula.id}_{uuid.uuid4().hex[:8]}"
+
+    # Atualiza a situação da aula e a URL da sala
+    aula.situacao += 1
+    aula.sala_url = f"https://meet.jit.si/{nome_sala}"
+    aula.save()
+
+    # Redireciona de volta para a página de dados da aula ou qualquer página onde o botão será exibido
+    return redirect('sistema:dados_aula', _id=aula.pk)
+
+
+@login_required
+def entrar_aula(request, _id):
+    aula = get_object_or_404(Aula, id=_id)
+    return redirect(aula.sala_url)
+
